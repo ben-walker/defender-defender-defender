@@ -234,7 +234,39 @@ void mouse(int button, int state, int x, int y) {
    printf("%d %d\n", x, y);
 }
 
+void initializeWorld() {
+   for (int i = 0; i < WORLDX; i++) {
+      for (int j = 0; j < WORLDY; j++) {
+         for (int k = 0; k < WORLDZ; k++) {
+            world[i][j][k] = 0;
+         }
+      }
+   }
+}
 
+void pgmToHeights(const char *pgmFile, const char *delim, const int maxHeight) {
+   char *line = NULL, *token = NULL;
+   size_t len = 0;
+   FILE *pgm = fopen(pgmFile, "r");
+
+   if (!pgm) {
+      fprintf(stderr, "Height map .pgm could not be read.");
+      exit(EXIT_FAILURE);
+   }
+
+   while (getline(&line, &len, pgm) != -1) {
+      if (line[0] == '#') continue;
+      line[strcspn(line, "\r\n")] = 0;
+
+      token = strtok(line, delim);
+      while (token != NULL) {
+         token = strtok(NULL, delim);
+      }
+   }
+
+   fclose(pgm);
+   free(line);
+}
 
 int main(int argc, char** argv)
 {
@@ -250,10 +282,7 @@ int i, j, k;
 		with dimensions of 100,50,100. */
    if (testWorld == 1) {
 	/* initialize world to empty */
-      for(i=0; i<WORLDX; i++)
-         for(j=0; j<WORLDY; j++)
-            for(k=0; k<WORLDZ; k++)
-               world[i][j][k] = 0;
+      initializeWorld();
 
 	/* some sample objects */
 	/* build a red platform */
@@ -292,11 +321,9 @@ int i, j, k;
 	/* create sample player */
       createPlayer(0, 52.0, 27.0, 52.0, 0.0);
    } else {
-
-	/* your code to build the world goes here */
-
+      initializeWorld();
+      pgmToHeights("ground.pgm", " ", 255);
    }
-
 
 	/* starts the graphics processing loop */
 	/* code after this will not run until the program exits */
