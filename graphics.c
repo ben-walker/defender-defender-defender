@@ -10,6 +10,8 @@
 
 #include "graphics.h"
 
+GLubyte  world[WORLDX][WORLDY][WORLDZ];
+
 #define MOB_COUNT 10
 #define PLAYER_COUNT 10
 
@@ -411,7 +413,6 @@ GLfloat gray[] = {0.3, 0.3, 0.3, 1.0};
 GLfloat white[] = {1.0, 1.0, 1.0, 1.0};
 int i, j, k;
 
-   buildDisplayList();
    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	/* position viewpoint based on mouse rotation and keyboard 
@@ -434,6 +435,8 @@ int i, j, k;
       glTranslatef(vpx, vpy - 0.5, vpz);
    //   glTranslatef(vpx, vpy, vpz);
    }
+
+   buildDisplayList();
 
 
 	/* set viewpoint light position */
