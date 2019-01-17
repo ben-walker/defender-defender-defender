@@ -35,8 +35,8 @@ int lerpHeight(const int initialHeight) {
    return height;
 }
 
-void fillYAxis(const int x, const int y, const int z) {
-   for (int i = y; i >= 0; i--) world[x][i][z] = 1;
+void fillYAxis(const int x, int y, const int z) {
+   for (; y >= 0; y--) world[x][y][z] = 1;
 }
 
 void addHeightsToWorld(const char *line, int *x, int *z) {
@@ -52,7 +52,6 @@ void addHeightsToWorld(const char *line, int *x, int *z) {
          *x = *x + 1;
          *z = 0;
       }
-      world[*x][height][*z] = 1;
       fillYAxis(*x, height, *z);
       *z = *z + 1;
       token = strtok(NULL, " ");
