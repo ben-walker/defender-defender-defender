@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <limits.h>
+#include <stdbool.h>
 
 #include "graphics.h"
 
@@ -246,26 +248,65 @@ void initializeWorld() {
    }
 }
 
-void pgmToHeights(const char *pgmFile, const char *delim, const int maxHeight) {
-   char *line = NULL, *token = NULL;
+int convertToNum(const char *line) {
+   char *end = NULL;
+   long converted = strtol(line, &end, 10);
+
+   if (converted == LONG_MAX || converted == LONG_MIN) {
+      fprintf(stderr, "Could not read pgm height map.");
+      exit(EXIT_FAILURE);
+   }
+   if (end == line) return -1;
+   return converted;
+}
+
+bool isComment(const char *line) {
+   return line[0] == '#';
+}
+
+void formatLine(char *line) {
+   line[strcspn(line, "\r\n")] = 0;
+}
+
+int lerpHeight(int initialHeight) {
+   return (initialHeight / 255.0) * WORLDY - 1;
+}
+
+void addHeightsToWorld(const char *line, int *x, int *z) {
+   char *copy = strdup(line);
+   int height;
+
+   if (*x == WORLDX - 1 && *z == WORLDZ - 1) return;
+
+   char *token = strtok(copy, " ");
+   while (token != NULL) {
+      height = convertToNum(token);
+      if (*z == WORLDZ - 1) {
+         *x = *x + 1;
+         *z = 0;
+      }
+      world[*x][lerpHeight(height)][*z] = 1;
+      *z = *z + 1;
+      token = strtok(NULL, " ");
+   }
+}
+
+void buildTerrainFromPgm(const char *pgmFile) {
+   char *line = NULL;
    size_t len = 0;
+   int x = 0, z = 0;
    FILE *pgm = fopen(pgmFile, "r");
 
    if (!pgm) {
-      fprintf(stderr, "Height map .pgm could not be read.");
+      fprintf(stderr, "Could not open .pgm in read mode.");
       exit(EXIT_FAILURE);
    }
 
    while (getline(&line, &len, pgm) != -1) {
-      if (line[0] == '#') continue;
-      line[strcspn(line, "\r\n")] = 0;
-
-      token = strtok(line, delim);
-      while (token != NULL) {
-         token = strtok(NULL, delim);
-      }
+      if (isComment(line)) continue;
+      formatLine(line);
+      addHeightsToWorld(line, &x, &z);
    }
-
    fclose(pgm);
    free(line);
 }
@@ -324,7 +365,7 @@ int i, j, k;
       createPlayer(0, 52.0, 27.0, 52.0, 0.0);
    } else {
       initializeWorld();
-      pgmToHeights("ground.pgm", " ", 255);
+      buildTerrainFromPgm("ground.pgm");
    }
 
 	/* starts the graphics processing loop */
@@ -332,4 +373,3 @@ int i, j, k;
    glutMainLoop();
    return 0; 
 }
-
