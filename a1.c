@@ -268,8 +268,15 @@ void formatLine(char *line) {
    line[strcspn(line, "\r\n")] = 0;
 }
 
-int lerpHeight(int initialHeight) {
-   return (initialHeight / 255.0) * WORLDY - 1;
+int lerpHeight(const int initialHeight) {
+   int height = (initialHeight / (float) UCHAR_MAX) * (WORLDY - 30);
+   if (height < 0) height = 0;
+   else if (height > WORLDY - 1) height = WORLDY - 1;
+   return height;
+}
+
+void fillYAxis(const int x, const int y, const int z) {
+   for (int i = y; i >= 0; i--) world[x][i][z] = 1;
 }
 
 void addHeightsToWorld(const char *line, int *x, int *z) {
@@ -280,12 +287,13 @@ void addHeightsToWorld(const char *line, int *x, int *z) {
 
    char *token = strtok(copy, " ");
    while (token != NULL) {
-      height = convertToNum(token);
+      height = lerpHeight(convertToNum(token));
       if (*z == WORLDZ - 1) {
          *x = *x + 1;
          *z = 0;
       }
-      world[*x][lerpHeight(height)][*z] = 1;
+      world[*x][height][*z] = 1;
+      fillYAxis(*x, height, *z);
       *z = *z + 1;
       token = strtok(NULL, " ");
    }
