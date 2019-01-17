@@ -6,6 +6,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+const char *MAX_DEPTH = "255";
+
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 
 int convertToNum(const char *line) {
@@ -35,7 +37,7 @@ int lerpHeight(const int initialHeight) {
    return height;
 }
 
-void fillYAxis(const int x, int y, const int z) {
+void fillYAxisAtCoord(const int x, int y, const int z) {
    for (; y >= 0; y--) world[x][y][z] = 1;
 }
 
@@ -52,31 +54,35 @@ void addHeightsToWorld(const char *line, int *x, int *z) {
          *x = *x + 1;
          *z = 0;
       }
-      fillYAxis(*x, height, *z);
+      fillYAxisAtCoord(*x, height, *z);
       *z = *z + 1;
       token = strtok(NULL, " ");
    }
+}
+
+FILE *openFile(const char *filename) {
+   FILE *fp = fopen(filename, "r");
+   if (!fp) {
+      perror("Could not open file in read mode.");
+      exit(EXIT_FAILURE);
+   }
+   return fp;
 }
 
 void buildTerrainFromPgm(const char *pgmFile) {
    char *line = NULL;
    size_t len = 0;
    int x = 0, z = 0;
-   bool foundStart = false;
-   FILE *pgm = fopen(pgmFile, "r");
-
-   if (!pgm) {
-      fprintf(stderr, "Could not open .pgm in read mode.");
-      exit(EXIT_FAILURE);
-   }
+   bool fileStarted = false;
+   FILE *pgm = openFile(pgmFile);
 
    while (getline(&line, &len, pgm) != -1) {
       if (isComment(line)) continue;
       formatLine(line);
-      if (foundStart)
+      if (fileStarted)
          addHeightsToWorld(line, &x, &z);
-      else if (strcmp(line, "255") == 0)
-         foundStart = true;
+      else if (strcmp(line, MAX_DEPTH) == 0)
+         fileStarted = true;
    }
    fclose(pgm);
    free(line);
