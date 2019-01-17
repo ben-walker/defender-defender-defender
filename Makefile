@@ -1,6 +1,3 @@
-# framework information for older version of MACOS
-#INCLUDES = -F/System/Library/Frameworks -framework OpenGL -framework GLUT -lm
-
 EXE = a1
 
 SRC_DIR = src
