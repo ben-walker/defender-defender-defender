@@ -303,6 +303,7 @@ void buildTerrainFromPgm(const char *pgmFile) {
    char *line = NULL;
    size_t len = 0;
    int x = 0, z = 0;
+   bool foundStart = false;
    FILE *pgm = fopen(pgmFile, "r");
 
    if (!pgm) {
@@ -313,7 +314,10 @@ void buildTerrainFromPgm(const char *pgmFile) {
    while (getline(&line, &len, pgm) != -1) {
       if (isComment(line)) continue;
       formatLine(line);
-      addHeightsToWorld(line, &x, &z);
+      if (foundStart)
+         addHeightsToWorld(line, &x, &z);
+      else if (strcmp(line, "255") == 0)
+         foundStart = true;
    }
    fclose(pgm);
    free(line);
