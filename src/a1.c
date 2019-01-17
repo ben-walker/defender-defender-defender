@@ -302,7 +302,7 @@ int i, j, k;
       createPlayer(0, 52.0, 27.0, 52.0, 0.0);
    } else {
       initializeWorld();
-      buildTerrainFromPgm("ground.pgm");
+      buildHeightmapFrom("ground.pgm");
    }
 
 	/* starts the graphics processing loop */

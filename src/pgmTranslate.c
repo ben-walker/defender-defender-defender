@@ -6,7 +6,9 @@
 #include <stdbool.h>
 #include <string.h>
 
-const char *MAX_DEPTH = "255";
+const int MAX_DEPTH = 255;
+const int HEIGHTMAP_CUBE = 1;
+const char COMMENT = '#';
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 
@@ -15,7 +17,7 @@ int convertToNum(const char *line) {
    long converted = strtol(line, &end, 10);
 
    if (converted == LONG_MAX || converted == LONG_MIN) {
-      fprintf(stderr, "Could not read pgm height map.");
+      perror("Could not read height map.");
       exit(EXIT_FAILURE);
    }
    if (end == line) return -1;
@@ -23,44 +25,41 @@ int convertToNum(const char *line) {
 }
 
 bool isComment(const char *line) {
-   return line[0] == '#';
+   return line[0] == COMMENT;
 }
 
-void formatLine(char *line) {
+void format(char *line) {
    line[strcspn(line, "\r\n")] = 0;
 }
 
 int lerpHeight(const int initialHeight) {
-   int height = (initialHeight / (float) UCHAR_MAX) * (WORLDY - 30);
+   int height = (initialHeight / (float) MAX_DEPTH) * (WORLDY - 30);
    if (height < 0) height = 0;
    else if (height > WORLDY - 1) height = WORLDY - 1;
    return height;
 }
 
 void fillYAxisAtCoord(const int x, int y, const int z) {
-   for (; y >= 0; y--) world[x][y][z] = 1;
+   for (; y >= 0; y--) world[x][y][z] = HEIGHTMAP_CUBE;
 }
 
-void addHeightsToWorld(const char *line, int *x, int *z) {
-   char *copy = strdup(line);
-   int height;
+void addToHeightmap(const char *elevations, int *x, int *z) {
+   char *elevationsCp = strdup(elevations);
+   char *token = strtok(elevationsCp, " ");
 
-   if (*x == WORLDX - 1 && *z == WORLDZ - 1) return;
-
-   char *token = strtok(copy, " ");
    while (token != NULL) {
-      height = lerpHeight(convertToNum(token));
-      if (*z == WORLDZ - 1) {
+      if (*z >= WORLDZ) {
          *x = *x + 1;
          *z = 0;
       }
-      fillYAxisAtCoord(*x, height, *z);
+      if (*x >= WORLDX) return;
+      fillYAxisAtCoord(*x, lerpHeight(convertToNum(token)), *z);
       *z = *z + 1;
       token = strtok(NULL, " ");
    }
 }
 
-FILE *openFile(const char *filename) {
+FILE *open(const char *filename) {
    FILE *fp = fopen(filename, "r");
    if (!fp) {
       perror("Could not open file in read mode.");
@@ -69,21 +68,19 @@ FILE *openFile(const char *filename) {
    return fp;
 }
 
-void buildTerrainFromPgm(const char *pgmFile) {
-   char *line = NULL;
+void buildHeightmapFrom(const char *imageFile) {
+   char *elevations = NULL;
    size_t len = 0;
    int x = 0, z = 0;
-   bool fileStarted = false;
-   FILE *pgm = openFile(pgmFile);
+   bool headerProcessed = false;
+   FILE *imageFp = open(imageFile);
 
-   while (getline(&line, &len, pgm) != -1) {
-      if (isComment(line)) continue;
-      formatLine(line);
-      if (fileStarted)
-         addHeightsToWorld(line, &x, &z);
-      else if (strcmp(line, MAX_DEPTH) == 0)
-         fileStarted = true;
+   while (getline(&elevations, &len, imageFp) != -1) {
+      if (isComment(elevations)) continue;
+      format(elevations);
+      if (headerProcessed) addToHeightmap(elevations, &x, &z);
+      else if (convertToNum(elevations) == MAX_DEPTH) headerProcessed = true;
    }
-   fclose(pgm);
-   free(line);
+   fclose(imageFp);
+   free(elevations);
 }
