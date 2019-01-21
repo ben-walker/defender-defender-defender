@@ -248,6 +248,10 @@ void initializeWorld() {
    }
 }
 
+void setStartPosition() {
+   setViewPosition(-WORLDX / 2, -WORLDY / 2, -WORLDZ / 2);
+}
+
 int main(int argc, char** argv)
 {
 int i, j, k;
@@ -302,6 +306,7 @@ int i, j, k;
       createPlayer(0, 52.0, 27.0, 52.0, 0.0);
    } else {
       initializeWorld();
+      setStartPosition();
       buildHeightmapFrom("ground.pgm");
    }
 
