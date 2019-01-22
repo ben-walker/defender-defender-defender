@@ -1,30 +1,37 @@
 #include "momentum.h"
 #include "timeAssistant.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-const int MAX_VELOCITY = 20;
-const int MIN_VELOCITY = 0;
-const int VELOCITY_INCREMENT = 2;
-const int WAIT_MS = 1000;
-static Momentum momentum = {MIN_VELOCITY, 0};
+const float MAX_VELOCITY = 1.0;
+const float VELOCITY_INCREMENT = 0.04;
+const float VELOCITY_DECAY = 1.5;
+const int WAIT_MS = 100;
 
-void updateMomentum() {
-   long restTime = getMillisecondTimestamp() - momentum.lastMovementTS;
-   if (restTime < WAIT_MS && momentum.currentVelocity < MAX_VELOCITY) {
-      momentum.currentVelocity += VELOCITY_INCREMENT;
-   }
+static Momentum momentum = {0.0, 0};
+
+void fixVelocity() {
+   if (momentum.velocity > MAX_VELOCITY) momentum.velocity = MAX_VELOCITY;
+}
+
+long elapsedTime() {
+   return getMillisecondTimestamp() - momentum.lastMovementTS;
+}
+
+void updateLastMove() {
    momentum.lastMovementTS = getMillisecondTimestamp();
 }
 
-void decayMomentum() {
-   long restTime = getMillisecondTimestamp() - momentum.lastMovementTS;
-   if (restTime >= WAIT_MS && momentum.currentVelocity > MIN_VELOCITY) {
-      momentum.currentVelocity -= VELOCITY_INCREMENT;
-   }
+void updateMomentum() {
+   if (elapsedTime() < WAIT_MS) momentum.velocity += VELOCITY_INCREMENT;
+   fixVelocity();
+   updateLastMove();
 }
 
-int getCurrentVelocity() {
-   return momentum.currentVelocity;
+void decayMomentum() {
+   if (elapsedTime() >= WAIT_MS) momentum.velocity /= VELOCITY_DECAY;
+}
+
+float getVelocity() {
+   return momentum.velocity;
 }

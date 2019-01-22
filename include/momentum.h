@@ -2,7 +2,7 @@
 #define MOMENTUM_
 
 typedef struct Momentum {
-   int currentVelocity;
+   float velocity;
    long lastMovementTS;
 } Momentum;
 
@@ -10,6 +10,6 @@ void updateMomentum();
 
 void decayMomentum();
 
-int getCurrentVelocity();
+float getVelocity();
 
 #endif // MOMENTUM_
