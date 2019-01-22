@@ -4,9 +4,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-static long lastUpdateTime = 0;
-
 const int UPDATE_RESOLUTION_MS = 500;
+static long lastUpdateTime = 0;
 
 bool readyToUpdate() {
    long newTime = getMillisecondTimestamp();
