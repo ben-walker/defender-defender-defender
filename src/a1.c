@@ -10,6 +10,7 @@
 #include "graphics.h"
 #include "updateLever.h"
 #include "momentum.h"
+#include "momentousMovement.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -102,6 +103,7 @@ extern void getUserColour(int, GLfloat *, GLfloat *, GLfloat *, GLfloat *,
 	   will be the negative value of the array indices */
 void collisionResponse() {
    updateMomentum();
+   moveWithMomentum(getVelocity());
 }
 
 
@@ -211,6 +213,7 @@ void update() {
    } else {
       if (!readyToUpdate()) return;
       decayMomentum();
+      moveWithMomentum(getVelocity());
       logUpdateComplete();
    }
 }
