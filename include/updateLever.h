@@ -3,8 +3,6 @@
 
 #include <stdbool.h>
 
-static long lastUpdateTime = 0;
-
 bool readyToUpdate();
 
 void logUpdateComplete();
