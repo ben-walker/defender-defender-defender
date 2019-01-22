@@ -9,6 +9,7 @@
 #include "pgmTranslate.h"
 #include "graphics.h"
 #include "updateLever.h"
+#include "momentum.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -100,9 +101,7 @@ extern void getUserColour(int, GLfloat *, GLfloat *, GLfloat *, GLfloat *,
 	/* note that the world coordinates returned from getViewPosition()
 	   will be the negative value of the array indices */
 void collisionResponse() {
-
-	/* your code for collisions goes here */
-
+   updateMomentum();
 }
 
 
@@ -143,7 +142,6 @@ void draw2D() {
 	/*  system is running */
 	/* -gravity must also implemented here, duplicate collisionResponse */
 void update() {
-   if (!readyToUpdate()) return;
    int i, j, k;
    float *la;
 
@@ -211,11 +209,10 @@ void update() {
 
 
    } else {
-
-	/* your code goes here */
-
+      if (!readyToUpdate()) return;
+      decayMomentum();
+      logUpdateComplete();
    }
-   logUpdateComplete();
 }
 
 
