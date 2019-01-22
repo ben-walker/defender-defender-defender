@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-long getMillisecondTimestamp() {
+long getMsTimestamp() {
    struct timespec stamp;
    if (clock_gettime(CLOCK_REALTIME, &stamp) == -1) {
       perror("Could not get time.");

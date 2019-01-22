@@ -1,6 +1,6 @@
 #ifndef TIME_ASSISTANT_
 #define TIME_ASSISTANT_
 
-long getMillisecondTimestamp();
+long getMsTimestamp();
 
 #endif // TIME_ASSISTANT_

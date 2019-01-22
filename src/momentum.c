@@ -15,11 +15,11 @@ void fixVelocity() {
 }
 
 long elapsedTime() {
-   return getMillisecondTimestamp() - momentum.lastMovementTS;
+   return getMsTimestamp() - momentum.lastMovementTS;
 }
 
 void updateLastMove() {
-   momentum.lastMovementTS = getMillisecondTimestamp();
+   momentum.lastMovementTS = getMsTimestamp();
 }
 
 void updateMomentum() {
