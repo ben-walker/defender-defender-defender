@@ -11,6 +11,7 @@
 #include "updateLever.h"
 #include "momentum.h"
 #include "momentousMovement.h"
+#include "collision.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -104,6 +105,7 @@ extern void getUserColour(int, GLfloat *, GLfloat *, GLfloat *, GLfloat *,
 void collisionResponse() {
    updateMomentum();
    moveWithMomentum(getVelocity());
+   catchBoundaryBreak();
 }
 
 
@@ -214,6 +216,7 @@ void update() {
       if (!readyToUpdate()) return;
       decayMomentum();
       moveWithMomentum(getVelocity());
+      catchBoundaryBreak();
       logUpdateComplete();
    }
 }
