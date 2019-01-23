@@ -8,10 +8,9 @@ const int UPDATE_RESOLUTION_MS = 50;
 static long lastUpdateTime = 0;
 
 bool readyToUpdate() {
-   long newTime = getMsTimestamp();
-   return lastUpdateTime + UPDATE_RESOLUTION_MS <= newTime;
+   return lastUpdateTime + UPDATE_RESOLUTION_MS <= getMsTimestamp();
 }
 
-void logUpdateComplete() {
+void logUpdate() {
    lastUpdateTime = getMsTimestamp();
 }

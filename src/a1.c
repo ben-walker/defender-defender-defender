@@ -217,7 +217,7 @@ void update() {
       decayMomentum();
       moveWithMomentum(getVelocity());
       if (collision()) killMomentum();
-      logUpdateComplete();
+      logUpdate();
    }
 }
 

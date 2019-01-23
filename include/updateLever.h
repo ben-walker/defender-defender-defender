@@ -5,6 +5,6 @@
 
 bool readyToUpdate();
 
-void logUpdateComplete();
+void logUpdate();
 
 #endif // UPDATE_LEVER_
