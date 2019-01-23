@@ -8,28 +8,38 @@ extern void getViewPosition(float *, float *, float *);
 extern void getOldViewPosition(float *, float *, float *);
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 
-float boundPoint(const float point, const float dimension) {
+float bind(const float point, const float dimension) {
    float bounded = point;
    if (-point < 0) bounded = 0.0;
    else if (-point > dimension - 1) bounded = -(dimension - 1);
    return bounded;
 }
 
-void boundaryCollision() {
+void resetPosition() {
    float x, y, z;
-   getViewPosition(&x, &y, &z);
-   x = boundPoint(x, WORLDX);
-   y = boundPoint(y, WORLDY);
-   z = boundPoint(z, WORLDZ);
+   getOldViewPosition(&x, &y, &z);
    setViewPosition(x, y, z);
 }
 
-void worldCollision() {
+bool boundaryCollision() {
    float x, y, z;
    getViewPosition(&x, &y, &z);
-   int wx = -x, wy = -y, wz = -z;
-   if (world[wx][wy][wz] == 1) {
-      getOldViewPosition(&x, &y, &z);
-      setViewPosition(x, y, z);
+   float nx = bind(x, WORLDX), ny = bind(y, WORLDY), nz = bind(z, WORLDZ);
+   setViewPosition(nx, ny, nz);
+   return x != nx || y != ny || z != nz;
+}
+
+bool worldCollision() {
+   bool collision = false;
+   float x, y, z;
+   getViewPosition(&x, &y, &z);
+   if (world[(int) -x][(int) -y][(int) -z] == 1) {
+      resetPosition();
+      collision = true;
    }
+   return collision;
+}
+
+bool collision() {
+   return boundaryCollision() || worldCollision();
 }

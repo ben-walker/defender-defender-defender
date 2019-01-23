@@ -1,8 +1,8 @@
 #ifndef COLLISION_
 #define COLLISION_
 
-void boundaryCollision();
+#include <stdbool.h>
 
-void worldCollision();
+bool collision();
 
 #endif // COLLISION_
