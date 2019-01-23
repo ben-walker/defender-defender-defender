@@ -12,6 +12,7 @@
 #include "momentum.h"
 #include "momentousMovement.h"
 #include "collision.h"
+#include "humanHerd.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -245,17 +246,22 @@ void mouse(int button, int state, int x, int y) {
 }
 
 void initializeWorld() {
-   for (int i = 0; i < WORLDX; i++) {
-      for (int j = 0; j < WORLDY; j++) {
-         for (int k = 0; k < WORLDZ; k++) {
+   for (int i = 0; i < WORLDX; i++)
+      for (int j = 0; j < WORLDY; j++)
+         for (int k = 0; k < WORLDZ; k++)
             world[i][j][k] = 0;
-         }
-      }
-   }
 }
 
 void setStartPosition() {
    setViewPosition(-WORLDX / 2, -WORLDY / 2, -WORLDZ / 2);
+}
+
+void spawnDemoPeople() {
+   spawnHuman(10, 47, 10);
+   spawnHuman(20, 47, 20);
+   spawnHuman(90, 47, 10);
+   spawnHuman(75, 47, 75);
+   spawnHuman(30, 47, 20);
 }
 
 int main(int argc, char** argv)
@@ -314,6 +320,7 @@ int i, j, k;
       initializeWorld();
       setStartPosition();
       buildHeightmapFrom("ground.pgm");
+      spawnDemoPeople();
    }
 
 	/* starts the graphics processing loop */
