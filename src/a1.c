@@ -105,8 +105,7 @@ extern void getUserColour(int, GLfloat *, GLfloat *, GLfloat *, GLfloat *,
 void collisionResponse() {
    updateMomentum();
    moveWithMomentum(getVelocity());
-   boundaryCollision();
-   worldCollision();
+   if (collision()) killMomentum();
 }
 
 
@@ -217,8 +216,7 @@ void update() {
       if (!readyToUpdate()) return;
       decayMomentum();
       moveWithMomentum(getVelocity());
-      boundaryCollision();
-      worldCollision();
+      if (collision()) killMomentum();
       logUpdateComplete();
    }
 }
