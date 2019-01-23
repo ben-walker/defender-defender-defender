@@ -32,6 +32,10 @@ void decayMomentum() {
    if (elapsedTime() >= WAIT_MS) momentum.velocity /= VELOCITY_DECAY;
 }
 
+void killMomentum() {
+   momentum.velocity = 0.0;
+}
+
 float getVelocity() {
    return momentum.velocity;
 }

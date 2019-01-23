@@ -10,6 +10,8 @@ void updateMomentum();
 
 void decayMomentum();
 
+void killMomentum();
+
 float getVelocity();
 
 #endif // MOMENTUM_
