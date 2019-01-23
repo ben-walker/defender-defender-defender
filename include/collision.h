@@ -1,6 +1,8 @@
 #ifndef COLLISION_
 #define COLLISION_
 
-void catchBoundaryBreak();
+void boundaryCollision();
+
+void worldCollision();
 
 #endif // COLLISION_
