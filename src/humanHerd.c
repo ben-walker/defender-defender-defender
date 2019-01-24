@@ -3,10 +3,13 @@
 #include <stdbool.h>
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
-static const int HEAD = 1;
-static const int TORSO = 3;
-static const int LEGS = 7;
-static const int BODY[] = {LEGS, TORSO, HEAD};
+static const int HEAD_COLOR = 1;
+static const int TORSO_COLOR = 3;
+static const int LEGS_COLOR = 7;
+
+enum MAX_HUMANS { MAX_HUMANS = 10 };
+static Human humans[MAX_HUMANS];
+static int numHumans = 0;
 
 bool occupied(int x, int y, int z) {
    return world[x][y][z] != 0;
@@ -18,13 +21,26 @@ int findAvailableY(const int x, int y, const int z) {
    return y;
 }
 
-int height() {
-   return sizeof(BODY) / sizeof(BODY[0]);
+Human getNewHuman(const int x, const int botY, const int z) {
+   Point legs = { x, botY, z, LEGS_COLOR };
+   Point torso = { x, botY + 1, z, TORSO_COLOR };
+   Point head = { x, botY + 2, z, HEAD_COLOR };
+   return (Human) { head, torso, legs };
+}
+
+void addToWorld(Human newHuman) {
+   int x = newHuman.legs.x, z = newHuman.legs.z;
+   world[x][newHuman.legs.y][z] = newHuman.legs.color;
+   world[x][newHuman.torso.y][z] = newHuman.torso.color;
+   world[x][newHuman.head.y][z] = newHuman.head.color;
+   humans[numHumans] = newHuman;
+   numHumans++;
 }
 
 void spawnHuman(int x, int y, int z) {
+   if (numHumans == MAX_HUMANS)
+      return;
    if (occupied(x, y, z))
       y = findAvailableY(x, y, z);
-   for (int i = height() - 1; i >= 0; i--)
-      world[x][y + i][z] = BODY[i];
+   addToWorld(getNewHuman(x, y, z));
 }
