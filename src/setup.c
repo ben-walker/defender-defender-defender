@@ -1,12 +1,16 @@
 #include "setup.h"
 #include "graphics.h"
 #include "humanHerd.h"
+#include <time.h>
+#include <stdlib.h>
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 extern void setViewPosition(float, float, float);
 extern void setViewOrientation(float, float, float);
 
 static const int Y_ORI = 135;
+static const int MAX_HUMAN_Y = 47;
+static const int MIN_HUMAN_Y = 20;
 
 void initializeWorld() {
    for (int i = 0; i < WORLDX; i++)
@@ -21,9 +25,8 @@ void setStartPosition() {
 }
 
 void spawnSomeFolks() {
-   spawnHuman(10, 47, 10);
-   spawnHuman(20, 47, 20);
-   spawnHuman(90, 47, 10);
-   spawnHuman(75, 47, 75);
-   spawnHuman(30, 47, 20);
+   int ymod = (MAX_HUMAN_Y - MIN_HUMAN_Y + 1) + MIN_HUMAN_Y;
+   srand(time(NULL));
+   for (int i = 0; i < MAX_HUMANS; i++)
+      spawnHuman(rand() % WORLDX, rand() % ymod, rand() % WORLDZ);
 }

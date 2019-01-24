@@ -7,7 +7,6 @@ static const int HEAD_COLOR = 1;
 static const int TORSO_COLOR = 3;
 static const int LEGS_COLOR = 7;
 
-enum MAX_HUMANS { MAX_HUMANS = 10 };
 static Human humans[MAX_HUMANS];
 static int numHumans = 0;
 
