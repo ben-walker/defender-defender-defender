@@ -3,10 +3,10 @@
 #include <stdbool.h>
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
-const int HEAD = 1;
-const int TORSO = 3;
-const int LEGS = 7;
-const int BODY[] = {LEGS, TORSO, HEAD};
+static const int HEAD = 1;
+static const int TORSO = 3;
+static const int LEGS = 7;
+static const int BODY[] = {LEGS, TORSO, HEAD};
 
 bool occupied(int x, int y, int z) {
    return world[x][y][z] != 0;

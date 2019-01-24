@@ -6,10 +6,10 @@
 #include <stdbool.h>
 #include <string.h>
 
-const int MAX_DEPTH = 255;
-const int MIN_AIRSPACE = 30;
-const int HEIGHTMAP_CUBE = 1;
-const char COMMENT = '#';
+static const int MAX_DEPTH = 255;
+static const int MIN_AIRSPACE = 30;
+static const int HEIGHTMAP_CUBE = 1;
+static const char COMMENT = '#';
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 

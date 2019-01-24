@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-const int UPDATE_RESOLUTION_MS = 50;
+static const int UPDATE_RESOLUTION_MS = 50;
 static long lastUpdateTime = 0;
 
 bool readyToUpdate() {

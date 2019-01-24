@@ -96,7 +96,7 @@ extern void getUserColour(int, GLfloat *, GLfloat *, GLfloat *, GLfloat *,
 
 /********* end of extern variable declarations **************/
 
-const char *GROUND_FILE = "ground.pgm";
+static const char *GROUND_FILE = "ground.pgm";
 
 	/*** collisionResponse() ***/
 	/* -performs collision detection and response */

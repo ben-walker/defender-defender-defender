@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const int SEC_CONV = 1000;
-const double NSEC_CONV = 1e6;
+static const int SEC_CONV = 1000;
+static const double NSEC_CONV = 1e6;
 
 long getMsTimestamp() {
    struct timespec stamp;
