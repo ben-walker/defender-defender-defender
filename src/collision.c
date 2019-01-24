@@ -7,6 +7,12 @@ extern void setViewPosition(float, float, float);
 extern void getViewPosition(float *, float *, float *);
 extern void getOldViewPosition(float *, float *, float *);
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
+static const float PREDICTIVE = 1.9;
+static const float VIC = 0.4;
+
+bool rawOccupied(const float x, const float y, const float z) {
+   return world[(int) -x][(int) -y][(int) -z] != 0;
+}
 
 float bind(const float point, const float dimension) {
    float bounded = point;
@@ -20,15 +26,34 @@ float bind(const float point, const float dimension) {
 void bindViewPosition(float *x, float *y, float *z) {
    float ox, oy, oz;
    getViewPosition(&ox, &oy, &oz);
-   *x = bind(ox, WORLDX);
-   *y = bind(oy, WORLDY);
-   *z = bind(oz, WORLDZ);
+   *x = bind(ox, WORLDX); *y = bind(oy, WORLDY); *z = bind(oz, WORLDZ);
 }
 
 bool viewPositionOccupied() {
    float x, y, z;
    getViewPosition(&x, &y, &z);
-   return world[(int) -x][(int) -y][(int) -z] != 0;
+   return rawOccupied(x, y, z);
+}
+
+bool predictiveCollision() {
+   float ox, oy, oz, x, y, z;
+   getOldViewPosition(&ox, &oy, &oz);
+   getViewPosition(&x, &y, &z);
+   ox += ((x - ox) * PREDICTIVE); oy += ((y - oy) * PREDICTIVE); oz += ((z - oz) * PREDICTIVE);
+   return rawOccupied(ox, oy, oz);
+}
+
+bool vicinityOccupied() {
+   float x, y, z;
+   getViewPosition(&x, &y, &z);
+   return rawOccupied(x + VIC, y, z) ||
+      rawOccupied(x - VIC, y, z) ||
+      rawOccupied(x, y, z + VIC) ||
+      rawOccupied(x, y, z - VIC) ||
+      rawOccupied(x + VIC, y, z + VIC) ||
+      rawOccupied(x + VIC, y, z - VIC) ||
+      rawOccupied(x - VIC, y, z + VIC) ||
+      rawOccupied(x - VIC, y, z - VIC);
 }
 
 void resetPosition() {
@@ -47,7 +72,7 @@ bool boundaryCollision() {
 
 bool worldCollision() {
    bool collision = false;
-   if (viewPositionOccupied()) {
+   if (viewPositionOccupied() || predictiveCollision() || vicinityOccupied()) {
       resetPosition();
       collision = true;
    }
