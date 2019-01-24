@@ -219,6 +219,7 @@ void update() {
       moveWithMomentum(getVelocity());
       if (collision())
          killMomentum();
+      applyHumanGravity();
       logUpdate();
    }
 }

@@ -15,8 +15,8 @@ bool occupied(int x, int y, int z) {
    return world[x][y][z] != 0;
 }
 
-int findAvailableY(const int x, int y, const int z) {
-   while (world[x][y][z] != 0)
+int findNextAvailableY(const int x, int y, const int z) {
+   while (occupied(x, y, z))
       y += 1;
    return y;
 }
@@ -28,19 +28,52 @@ Human getNewHuman(const int x, const int botY, const int z) {
    return (Human) { head, torso, legs };
 }
 
-void addToWorld(Human newHuman) {
-   int x = newHuman.legs.x, z = newHuman.legs.z;
-   world[x][newHuman.legs.y][z] = newHuman.legs.color;
-   world[x][newHuman.torso.y][z] = newHuman.torso.color;
-   world[x][newHuman.head.y][z] = newHuman.head.color;
-   humans[numHumans] = newHuman;
+void draw(Human human) {
+   int x = human.legs.x, z = human.legs.z;
+   world[x][human.legs.y][z] = human.legs.color;
+   world[x][human.torso.y][z] = human.torso.color;
+   world[x][human.head.y][z] = human.head.color;
+}
+
+void erase(Human human) {
+   int x = human.legs.x, z = human.legs.z;
+   world[x][human.legs.y][z] = 0;
+   world[x][human.torso.y][z] = 0;
+   world[x][human.head.y][z] = 0;
+}
+
+bool onTheGround(Human human) {
+   int x = human.legs.x, z = human.legs.z;
+   return occupied(x, human.legs.y - 1, z);
+}
+
+void trackHumans(Human human) {
+   humans[numHumans] = human;
    numHumans++;
+}
+
+void adjustHumanByVector(Human *human, const int x, const int y, const int z) {
+   human->head.x += x; human->torso.x += x; human->legs.x += x;
+   human->head.y += y; human->torso.y += y; human->legs.y += y;
+   human->head.z += z; human->torso.z += z; human->legs.z += z;
 }
 
 void spawnHuman(int x, int y, int z) {
    if (numHumans == MAX_HUMANS)
       return;
    if (occupied(x, y, z))
-      y = findAvailableY(x, y, z);
-   addToWorld(getNewHuman(x, y, z));
+      y = findNextAvailableY(x, y, z);
+   Human human = getNewHuman(x, y, z);
+   draw(human);
+   trackHumans(human);
+}
+
+void applyHumanGravity() {
+   for (int i = 0; i < numHumans; i++) {
+      if (onTheGround(humans[i]))
+         continue;
+      erase(humans[i]);
+      adjustHumanByVector(&humans[i], 0, -1, 0);
+      draw(humans[i]);
+   }
 }

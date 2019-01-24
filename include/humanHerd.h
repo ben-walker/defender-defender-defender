@@ -16,4 +16,6 @@ typedef struct Human {
 
 void spawnHuman(int x, int y, int z);
 
+void applyHumanGravity();
+
 #endif // HUMAN_HERD_
