@@ -4,8 +4,8 @@
 #include <time.h>
 
 const float MAX_VELOCITY = 1.0;
-const float VELOCITY_INCREMENT = 0.04;
-const float VELOCITY_DECAY = 1.5;
+const float ACC_RATE = 0.04;
+const float DECAY_RATE = 1.5;
 const int WAIT_MS = 100;
 
 static Momentum momentum = {0.0, 0};
@@ -23,13 +23,13 @@ void updateLastMove() {
 }
 
 void updateMomentum() {
-   if (elapsedTime() < WAIT_MS) momentum.velocity += VELOCITY_INCREMENT;
+   if (elapsedTime() < WAIT_MS) momentum.velocity += ACC_RATE;
    fixVelocity();
    updateLastMove();
 }
 
 void decayMomentum() {
-   if (elapsedTime() >= WAIT_MS) momentum.velocity /= VELOCITY_DECAY;
+   if (elapsedTime() >= WAIT_MS) momentum.velocity /= DECAY_RATE;
 }
 
 void killMomentum() {
