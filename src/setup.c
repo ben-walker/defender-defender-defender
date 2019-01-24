@@ -4,6 +4,9 @@
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 extern void setViewPosition(float, float, float);
+extern void setViewOrientation(float, float, float);
+
+static const int Y_ORI = 135;
 
 void initializeWorld() {
    for (int i = 0; i < WORLDX; i++)
@@ -13,7 +16,8 @@ void initializeWorld() {
 }
 
 void setStartPosition() {
-   setViewPosition(-WORLDX / 2, -WORLDY / 2, -WORLDZ / 2);
+   setViewPosition(WORLDX - 1, -WORLDY / 2, WORLDZ - 1);
+   setViewOrientation(0, Y_ORI, 0);
 }
 
 void spawnSomeFolks() {
