@@ -6,6 +6,7 @@
 /* Frames per second code taken from : */
 /* http://www.lighthouse3d.com/opengl/glut/index.php?fps */
 
+#include "setup.h"
 #include "pgmTranslate.h"
 #include "graphics.h"
 #include "updateLever.h"
@@ -247,25 +248,6 @@ void mouse(int button, int state, int x, int y) {
    printf("%d %d\n", x, y);
 }
 
-void initializeWorld() {
-   for (int i = 0; i < WORLDX; i++)
-      for (int j = 0; j < WORLDY; j++)
-         for (int k = 0; k < WORLDZ; k++)
-            world[i][j][k] = 0;
-}
-
-void setStartPosition() {
-   setViewPosition(-WORLDX / 2, -WORLDY / 2, -WORLDZ / 2);
-}
-
-void spawnDemoPeople() {
-   spawnHuman(10, 47, 10);
-   spawnHuman(20, 47, 20);
-   spawnHuman(90, 47, 10);
-   spawnHuman(75, 47, 75);
-   spawnHuman(30, 47, 20);
-}
-
 int main(int argc, char** argv)
 {
    int i, j;
@@ -322,7 +304,7 @@ int main(int argc, char** argv)
       initializeWorld();
       setStartPosition();
       buildHeightmapFrom(GROUND_FILE);
-      spawnDemoPeople();
+      spawnSomeFolks();
    }
 
 	/* starts the graphics processing loop */
