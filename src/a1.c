@@ -96,6 +96,7 @@ extern void getUserColour(int, GLfloat *, GLfloat *, GLfloat *, GLfloat *,
 
 /********* end of extern variable declarations **************/
 
+const char *GROUND_FILE = "ground.pgm";
 
 	/*** collisionResponse() ***/
 	/* -performs collision detection and response */
@@ -319,7 +320,7 @@ int i, j, k;
    } else {
       initializeWorld();
       setStartPosition();
-      buildHeightmapFrom("ground.pgm");
+      buildHeightmapFrom(GROUND_FILE);
       spawnDemoPeople();
    }
 
