@@ -7,6 +7,7 @@
 #include <string.h>
 
 const int MAX_DEPTH = 255;
+const int MIN_AIRSPACE = 30;
 const int HEIGHTMAP_CUBE = 1;
 const char COMMENT = '#';
 
@@ -20,8 +21,7 @@ int convertToNum(const char *line) {
       perror("Could not read height map.");
       exit(EXIT_FAILURE);
    }
-   if (end == line) return -1;
-   return converted;
+   return end == line ? -1 : converted;
 }
 
 bool isComment(const char *line) {
@@ -33,14 +33,12 @@ void format(char *line) {
 }
 
 int lerpHeight(const int initialHeight) {
-   int height = (initialHeight / (float) MAX_DEPTH) * (WORLDY - 30);
-   if (height < 0) height = 0;
-   else if (height > WORLDY - 1) height = WORLDY - 1;
-   return height;
+   return (abs(initialHeight) / (float) MAX_DEPTH) * (WORLDY - MIN_AIRSPACE);
 }
 
 void fillYAxisAtCoord(const int x, int y, const int z) {
-   for (; y >= 0; y--) world[x][y][z] = HEIGHTMAP_CUBE;
+   for (; y >= 0; y--)
+      world[x][y][z] = HEIGHTMAP_CUBE;
 }
 
 void addToHeightmap(const char *elevations, int *x, int *z) {
@@ -52,7 +50,8 @@ void addToHeightmap(const char *elevations, int *x, int *z) {
          *x = *x + 1;
          *z = 0;
       }
-      if (*x >= WORLDX) return;
+      if (*x >= WORLDX)
+         return;
       fillYAxisAtCoord(*x, lerpHeight(convertToNum(token)), *z);
       *z = *z + 1;
       token = strtok(NULL, " ");
@@ -78,8 +77,10 @@ void buildHeightmapFrom(const char *imageFile) {
    while (getline(&elevations, &len, imageFp) != -1) {
       if (isComment(elevations)) continue;
       format(elevations);
-      if (headerProcessed) addToHeightmap(elevations, &x, &z);
-      else if (convertToNum(elevations) == MAX_DEPTH) headerProcessed = true;
+      if (headerProcessed)
+         addToHeightmap(elevations, &x, &z);
+      else if (convertToNum(elevations) == MAX_DEPTH)
+         headerProcessed = true;
    }
    fclose(imageFp);
    free(elevations);

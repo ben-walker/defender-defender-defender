@@ -11,7 +11,8 @@ const int WAIT_MS = 100;
 static Momentum momentum = {0.0, 0};
 
 void fixVelocity() {
-   if (momentum.velocity > MAX_VELOCITY) momentum.velocity = MAX_VELOCITY;
+   if (momentum.velocity > MAX_VELOCITY)
+      momentum.velocity = MAX_VELOCITY;
 }
 
 long elapsedTime() {
@@ -23,13 +24,15 @@ void updateLastMove() {
 }
 
 void updateMomentum() {
-   if (elapsedTime() < WAIT_MS) momentum.velocity += ACC_RATE;
+   if (elapsedTime() < WAIT_MS)
+      momentum.velocity += ACC_RATE;
    fixVelocity();
    updateLastMove();
 }
 
 void decayMomentum() {
-   if (elapsedTime() >= WAIT_MS) momentum.velocity /= DECAY_RATE;
+   if (elapsedTime() >= WAIT_MS)
+      momentum.velocity /= DECAY_RATE;
 }
 
 void killMomentum() {

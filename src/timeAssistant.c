@@ -3,11 +3,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+const int SEC_CONV = 1000;
+const double NSEC_CONV = 1e6;
+
 long getMsTimestamp() {
    struct timespec stamp;
    if (clock_gettime(CLOCK_REALTIME, &stamp) == -1) {
       perror("Could not get time.");
       exit(EXIT_FAILURE);
    }
-   return stamp.tv_sec * 1000 + stamp.tv_nsec / 1e6;
+   return stamp.tv_sec * SEC_CONV + stamp.tv_nsec / NSEC_CONV;
 }

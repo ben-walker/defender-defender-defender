@@ -391,7 +391,6 @@ int i, j, k;
         /* the displayList  */
         /* write your cube culling code here */
 void buildDisplayList() {
-int i, j, k;
 float newx, newy, newz;
         /* used to calculate frames per second */
 static int frame=0, time, timebase=0;

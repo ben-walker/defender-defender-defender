@@ -12,8 +12,9 @@ bool occupied(int x, int y, int z) {
    return world[x][y][z] != 0;
 }
 
-int findAvailableY(int x, int y, int z) {
-   while (world[x][y][z] != 0) y += 1;
+int findAvailableY(const int x, int y, const int z) {
+   while (world[x][y][z] != 0)
+      y += 1;
    return y;
 }
 
@@ -22,7 +23,8 @@ int height() {
 }
 
 void spawnHuman(int x, int y, int z) {
-   if (occupied(x, y, z)) y = findAvailableY(x, y, z);
+   if (occupied(x, y, z))
+      y = findAvailableY(x, y, z);
    for (int i = height() - 1; i >= 0; i--)
       world[x][y + i][z] = BODY[i];
 }

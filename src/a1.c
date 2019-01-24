@@ -107,7 +107,8 @@ const char *GROUND_FILE = "ground.pgm";
 void collisionResponse() {
    updateMomentum();
    moveWithMomentum(getVelocity());
-   if (collision()) killMomentum();
+   if (collision())
+      killMomentum();
 }
 
 
@@ -148,9 +149,6 @@ void draw2D() {
 	/*  system is running */
 	/* -gravity must also implemented here, duplicate collisionResponse */
 void update() {
-   int i, j, k;
-   float *la;
-
 	/* sample animation for the test world, don't remove this code */
 	/* demo of animating mobs */
    if (testWorld) {
@@ -215,10 +213,12 @@ void update() {
 
 
    } else {
-      if (!readyToUpdate()) return;
+      if (!readyToUpdate())
+         return;
       decayMomentum();
       moveWithMomentum(getVelocity());
-      if (collision()) killMomentum();
+      if (collision())
+         killMomentum();
       logUpdate();
    }
 }
@@ -267,7 +267,7 @@ void spawnDemoPeople() {
 
 int main(int argc, char** argv)
 {
-int i, j, k;
+   int i, j;
 	/* initialize the graphics system */
    graphicsInit(&argc, argv);
 
