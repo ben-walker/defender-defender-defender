@@ -81,7 +81,8 @@ void buildHeightmapFrom(const char *imageFile) {
    FILE *imageFp = open(imageFile);
 
    while (getline(&elevations, &len, imageFp) != -1) {
-      if (isComment(elevations)) continue;
+      if (isComment(elevations))
+         continue;
       format(elevations);
       processElevations(elevations, &x, &z);
    }
