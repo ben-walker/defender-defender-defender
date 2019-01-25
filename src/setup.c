@@ -10,7 +10,7 @@ extern void setViewOrientation(float, float, float);
 
 static const int Y_ORI = 135;
 static const int MAX_HUMAN_Y = 47;
-static const int MIN_HUMAN_Y = 20;
+static const int MIN_HUMAN_Y = 35;
 
 void initializeWorld() {
    for (int i = 0; i < WORLDX; i++)
@@ -25,8 +25,8 @@ void setStartPosition() {
 }
 
 void spawnSomeFolks() {
-   int ymod = (MAX_HUMAN_Y - MIN_HUMAN_Y + 1) + MIN_HUMAN_Y;
+   int yrange = (MAX_HUMAN_Y - MIN_HUMAN_Y + 1);
    srand(time(NULL));
    for (int i = 0; i < MAX_HUMANS; i++)
-      spawnHuman(rand() % WORLDX, rand() % ymod, rand() % WORLDZ);
+      spawnHuman(rand() % WORLDX, rand() % yrange + MIN_HUMAN_Y, rand() % WORLDZ);
 }
