@@ -6,10 +6,11 @@
 #include <stdbool.h>
 #include <string.h>
 
-static const int MAX_DEPTH = 255;
+static const int MAX_HEIGHT = 255;
 static const int MIN_AIRSPACE = 30;
 static const int HEIGHTMAP_CUBE = 1;
 static const char COMMENT = '#';
+static bool headerProcessed = false;
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 
@@ -33,7 +34,7 @@ void format(char *line) {
 }
 
 int lerpHeight(const int initialHeight) {
-   return (abs(initialHeight) / (float) MAX_DEPTH) * (WORLDY - MIN_AIRSPACE);
+   return (abs(initialHeight) / (float) MAX_HEIGHT) * (WORLDY - MIN_AIRSPACE);
 }
 
 void fillYAxisAtCoord(const int x, int y, const int z) {
@@ -41,18 +42,24 @@ void fillYAxisAtCoord(const int x, int y, const int z) {
       world[x][y][z] = HEIGHTMAP_CUBE;
 }
 
-void addToHeightmap(const char *elevations, int *x, int *z) {
+void processElevations(const char *elevations, int *x, int *z) {
    char *elevationsCp = strdup(elevations);
    char *token = strtok(elevationsCp, " ");
+   int height = 0;
 
    while (token != NULL) {
+      height = convertToNum(token);
+      if (!headerProcessed && height == MAX_HEIGHT) {
+         headerProcessed = true;
+         continue;
+      }
       if (*z >= WORLDZ) {
          *x = *x + 1;
          *z = 0;
       }
       if (*x >= WORLDX)
          return;
-      fillYAxisAtCoord(*x, lerpHeight(convertToNum(token)), *z);
+      fillYAxisAtCoord(*x, lerpHeight(height), *z);
       *z = *z + 1;
       token = strtok(NULL, " ");
    }
@@ -71,16 +78,12 @@ void buildHeightmapFrom(const char *imageFile) {
    char *elevations = NULL;
    size_t len = 0;
    int x = 0, z = 0;
-   bool headerProcessed = false;
    FILE *imageFp = open(imageFile);
 
    while (getline(&elevations, &len, imageFp) != -1) {
       if (isComment(elevations)) continue;
       format(elevations);
-      if (headerProcessed)
-         addToHeightmap(elevations, &x, &z);
-      else if (convertToNum(elevations) == MAX_DEPTH)
-         headerProcessed = true;
+      processElevations(elevations, &x, &z);
    }
    fclose(imageFp);
    free(elevations);
