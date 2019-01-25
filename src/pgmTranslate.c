@@ -8,7 +8,7 @@
 
 static const int MAX_HEIGHT = 255;
 static const int MIN_AIRSPACE = 30;
-static const int HEIGHTMAP_CUBE = 1;
+static const int HEIGHTMAP_CUBE = 2;
 static const char COMMENT = '#';
 static bool headerProcessed = false;
 
