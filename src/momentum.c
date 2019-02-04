@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-static const float MAX_VELOCITY = 1.0;
+static const float MAX_VELOCITY = 0.65;
 static const float ACC_RATE = 0.04;
-static const float DECAY_RATE = 1.5;
+static const float DECAY_RATE = 1.45;
 static const int WAIT_MS = 100;
 static Momentum momentum = {0.0, 0};
 
