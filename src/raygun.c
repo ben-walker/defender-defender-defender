@@ -6,6 +6,7 @@
 static const float HALF_CIRCLE = 180.0;
 static const int RAY_COLOR = 6; // pink
 static const int RAY_DIST = 150;
+static const int RAY_TIMER = 350;
 enum RAY_COUNT { RAY_COUNT = 10 };
 static Ray rays[RAY_COUNT];
 static int rayIndex = -1;
@@ -56,6 +57,6 @@ void fireRay() {
 void fizzleRays() {
    long ts = getMsTimestamp();
    for (int i = 0; i < RAY_COUNT; i += 1)
-      if (rays[i].spawnTime + 350 < ts)
+      if (rays[i].spawnTime + RAY_TIMER < ts)
          hideTube(rays[i].id);
 }
