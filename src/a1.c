@@ -233,12 +233,9 @@ void update() {
 	/*  released */ 
 void mouse(int button, int state, int x, int y) {
 
-   if (button == GLUT_LEFT_BUTTON)
-      printf("left button - ");
-   else if (button == GLUT_MIDDLE_BUTTON)
-      printf("middle button - ");
-   else
-      printf("right button - ");
+   if (button == GLUT_LEFT_BUTTON) {} // left mouse button
+   else if (button == GLUT_MIDDLE_BUTTON) {} // middle mouse button
+   else {} // right mouse button
 
    if (state == GLUT_UP)
       printf("up - ");
