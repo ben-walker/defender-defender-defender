@@ -14,6 +14,7 @@
 #include "momentousMovement.h"
 #include "collision.h"
 #include "humanHerd.h"
+#include "raygun.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -233,16 +234,10 @@ void update() {
 	/*  released */ 
 void mouse(int button, int state, int x, int y) {
 
-   if (button == GLUT_LEFT_BUTTON) {} // left mouse button
+   if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) // left mouse button
+      fireRay();
    else if (button == GLUT_MIDDLE_BUTTON) {} // middle mouse button
    else {} // right mouse button
-
-   if (state == GLUT_UP)
-      printf("up - ");
-   else
-      printf("down - ");
-
-   printf("%d %d\n", x, y);
 }
 
 int main(int argc, char** argv)
