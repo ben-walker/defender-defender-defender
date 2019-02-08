@@ -8,4 +8,6 @@ typedef struct Ray {
 
 void fireRay();
 
+void fizzleRays();
+
 #endif // RAYGUN_

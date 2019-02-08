@@ -13,6 +13,7 @@ static int rayIndex = -1;
 extern void getViewOrientation(float *, float *, float *);
 extern void getViewPosition(float *, float *, float *);
 extern void createTube(int, float, float, float, float, float, float, int);
+extern void hideTube(int);
 
 float rads(const float deg) {
    return deg * (M_PI / HALF_CIRCLE);
@@ -50,4 +51,11 @@ void fireRay() {
    Ray newRay = { .id = rayIndex, .spawnTime = getMsTimestamp() };
    rays[rayIndex] = newRay;
    spawnRay(newRay.id);
+}
+
+void fizzleRays() {
+   long ts = getMsTimestamp();
+   for (int i = 0; i < RAY_COUNT; i += 1)
+      if (rays[i].spawnTime + 350 < ts)
+         hideTube(rays[i].id);
 }

@@ -217,6 +217,7 @@ void update() {
    } else {
       if (!readyToUpdate())
          return;
+      fizzleRays();
       decayMomentum();
       moveWithMomentum(getVelocity());
       if (collision())
