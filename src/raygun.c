@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 
-static const float HALF_CIRCLE = 180.0;
+static const float RAD_CONV = M_PI / 180.0;
 static const int RAY_COLOR = 6; // pink
 static const int RAY_DIST = 150;
 static const int RAY_TIMER = 350;
@@ -17,7 +17,7 @@ extern void createTube(int, float, float, float, float, float, float, int);
 extern void hideTube(int);
 
 float rads(const float deg) {
-   return deg * (M_PI / HALF_CIRCLE);
+   return deg * RAD_CONV;
 }
 
 float endRayPos(const float pointStart, const float pointChange) {
