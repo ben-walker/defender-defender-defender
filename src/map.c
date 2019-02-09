@@ -9,7 +9,16 @@ extern void set2Dcolour(float []);
 
 static GLfloat HUMAN[] = {0.16, 1.0, 0.04, 1.0};
 static GLfloat BACKGROUND[] = {1.0, 0.35, 0.0, 0.8};
+static GLfloat FRAME[] = {0.0, 0.0, 0.0, 1.0};
 static GLfloat RAY[] = {1.0, 0.0, 0.83, 1.0};
+
+int mapX(const int x, const int sizeMod) {
+   return x + WORLDX * sizeMod;
+}
+
+int mapY(const int y, const int sizeMod) {
+   return y + WORLDZ * sizeMod;
+}
 
 void drawHumans(const int x, const int y, const int sizeMod) {
    Human *humans = getHumans();
@@ -41,11 +50,17 @@ void drawRays(const int x, const int y, const int sizeMod) {
 
 void drawBoundary(const int x, const int y, const int sizeMod) {
    set2Dcolour(BACKGROUND);
-   draw2Dbox(x, y, x + WORLDX * sizeMod, y + WORLDZ * sizeMod);
+   draw2Dbox(x, y, mapX(x, sizeMod), mapY(y, sizeMod));
+}
+
+void drawFrame(const int x, const int y, const int sizeMod) {
+   set2Dcolour(FRAME);
+   draw2Dbox(x - sizeMod, y - sizeMod, mapX(x, sizeMod) + sizeMod, mapY(y, sizeMod) + sizeMod);
 }
 
 void drawMap(const int x, const int y, const int sizeMod) {
    drawHumans(x, y, sizeMod);
    drawRays(x, y, sizeMod);
    drawBoundary(x, y, sizeMod);
+   drawFrame(x, y, sizeMod);
 }
