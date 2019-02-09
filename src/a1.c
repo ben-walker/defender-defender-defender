@@ -15,6 +15,7 @@
 #include "collision.h"
 #include "humanHerd.h"
 #include "raygun.h"
+#include "map.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -137,9 +138,7 @@ void draw2D() {
          draw2Dbox(500, 380, 524, 388);
       }
    } else {
-
-	/* your code goes here */
-
+      drawMap(20, 20, 2);
    }
 
 }
