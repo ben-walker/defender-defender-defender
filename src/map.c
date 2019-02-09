@@ -7,7 +7,7 @@ extern void draw2Dbox(int, int, int, int);
 extern void  draw2Dline(int, int, int, int, int);
 extern void set2Dcolour(float []);
 
-static GLfloat HUMAN[] = {0.16, 1.0, 0.04, 1.0};
+static GLfloat HUMAN[] = {0.01, 0.18, 0.76, 1.0};
 static GLfloat BACKGROUND[] = {1.0, 0.35, 0.0, 0.8};
 static GLfloat FRAME[] = {0.0, 0.0, 0.0, 1.0};
 static GLfloat RAY[] = {1.0, 0.0, 0.83, 1.0};
