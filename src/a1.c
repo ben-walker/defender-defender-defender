@@ -138,7 +138,13 @@ void draw2D() {
          draw2Dbox(500, 380, 524, 388);
       }
    } else {
-      drawMap(20, 20, 2);
+      switch (displayMap) {
+         case 1:
+            drawMap(20, 20, 2);
+            break;
+         case 2:
+            drawMap(260, 140, 5);
+      }
    }
 
 }
