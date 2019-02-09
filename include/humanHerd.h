@@ -37,4 +37,6 @@ void applyHumanGravity();
 
 void humanAtPoint(const float x, const float y, const float z);
 
+Human *getHumans();
+
 #endif // HUMAN_HERD_

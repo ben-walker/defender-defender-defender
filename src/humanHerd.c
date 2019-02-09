@@ -99,3 +99,7 @@ void humanAtPoint(const float fx, const float fy, const float fz) {
          printf("You hit %s!\n", human.name);
    }
 }
+
+Human *getHumans() {
+   return humans;
+}
