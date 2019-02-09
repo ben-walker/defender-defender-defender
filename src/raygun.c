@@ -20,8 +20,8 @@ float rads(const float deg) {
    return deg * RAD_CONV;
 }
 
-float endRayPos(const float pointStart, const float pointChange) {
-   return pointStart - pointChange * RAY_DIST;
+float endPoint(const float pointStart, const float pointChange, const float dist) {
+   return pointStart - pointChange * dist;
 }
 
 void correctedViewPos(float *x, float *y, float *z) {
@@ -37,21 +37,29 @@ void differentials(float *x, float *y, float *z) {
    *z = cosf(rads(-yrot));
 }
 
-void spawnRay(const int index) {
+void buildRayUnits(const float bx, const float by, const float bz,
+   const float xchange, const float ychange, const float zchange) {
+   float ex, ey, ez;
+   for (float i = 0.5; i < RAY_DIST; i += 0.5) {
+      ex = endPoint(bx, xchange, i);
+      ey = endPoint(by, ychange, i);
+      ez = endPoint(bz, zchange, i);
+      createTube(rayIndex, bx, by, bz, ex, ey, ez, RAY_COLOR);
+   }
+}
+
+void spawnRay() {
    float xchange, ychange, zchange, bx, by, bz;
    differentials(&xchange, &ychange, &zchange);
    correctedViewPos(&bx, &by, &bz);
-   float ex = endRayPos(bx, xchange),
-      ey = endRayPos(by, ychange),
-      ez = endRayPos(bz, zchange);
-   createTube(index, bx, by, bz, ex, ey, ez, RAY_COLOR);
+   buildRayUnits(bx, by, bz, xchange, ychange, zchange);
 }
 
 void fireRay() {
    rayIndex = (rayIndex == RAY_COUNT - 1) ? 0 : rayIndex + 1;
    Ray newRay = { .id = rayIndex, .spawnTime = getMsTimestamp() };
    rays[rayIndex] = newRay;
-   spawnRay(newRay.id);
+   spawnRay();
 }
 
 void fizzleRays() {
