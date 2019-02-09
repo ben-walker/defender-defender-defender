@@ -1,5 +1,6 @@
 #include "raygun.h"
 #include "timeAssistant.h"
+#include "humanHerd.h"
 #include <stdio.h>
 #include <math.h>
 
@@ -45,6 +46,7 @@ void buildRayUnits(const float bx, const float by, const float bz,
       ey = endPoint(by, ychange, i);
       ez = endPoint(bz, zchange, i);
       createTube(rayIndex, bx, by, bz, ex, ey, ez, RAY_COLOR);
+      humanAtPoint(ex, ey, ez);
    }
 }
 

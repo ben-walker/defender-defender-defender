@@ -35,4 +35,6 @@ void spawnHuman(int x, int y, int z);
 
 void applyHumanGravity();
 
+void humanAtPoint(const float x, const float y, const float z);
+
 #endif // HUMAN_HERD_

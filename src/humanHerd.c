@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include <stdbool.h>
 #include <string.h>
+#include <stdio.h>
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 static const int HEAD_COLOR = 1;
@@ -72,11 +73,29 @@ void spawnHuman(int x, int y, int z) {
 }
 
 void applyHumanGravity() {
-   for (int i = 0; i < numHumans; i++) {
+   for (int i = 0; i < numHumans; i += 1) {
       if (onTheGround(humans[i]))
          continue;
       erase(humans[i]);
       adjustHumanByVector(&humans[i], 0, -1, 0);
       draw(humans[i]);
+   }
+}
+
+bool pointsEqual(const Point i, const Point j) {
+   return i.x == j.x &&
+      i.y == j.y &&
+      i.z == j.z;
+}
+
+void humanAtPoint(const float fx, const float fy, const float fz) {
+   Point end = { fx, fy, fz, 0 };
+   Human human;
+   for (int i = 0; i < numHumans; i += 1) {
+      human = humans[i];
+      if (pointsEqual(human.head, end) ||
+         pointsEqual(human.torso, end) ||
+         pointsEqual(human.legs, end))
+         printf("You hit %s!\n", human.name);
    }
 }
