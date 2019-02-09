@@ -2,6 +2,7 @@
 #define HUMAN_HERD_
 
 enum MAX_HUMANS { MAX_HUMANS = 10 };
+enum NAME_LEN { NAME_LEN = 25 };
 
 typedef struct Point {
    int x;
@@ -14,7 +15,21 @@ typedef struct Human {
    Point head;
    Point torso;
    Point legs;
+   char name[NAME_LEN];
 } Human;
+
+static const char *NAMES[] = {
+   "Dan",
+   "Steven",
+   "Jack",
+   "Bob",
+   "Jim",
+   "Rebecca",
+   "Susan",
+   "Morgan",
+   "Emily",
+   "Olivia"
+};
 
 void spawnHuman(int x, int y, int z);
 

@@ -1,6 +1,7 @@
 #include "humanHerd.h"
 #include "graphics.h"
 #include <stdbool.h>
+#include <string.h>
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 static const int HEAD_COLOR = 1;
@@ -24,7 +25,10 @@ Human getNewHuman(const int x, const int botY, const int z) {
    Point legs = { x, botY, z, LEGS_COLOR };
    Point torso = { x, botY + 1, z, TORSO_COLOR };
    Point head = { x, botY + 2, z, HEAD_COLOR };
-   return (Human) { head, torso, legs };
+   Human newHuman = { head, torso, legs };
+   strncpy(newHuman.name, NAMES[numHumans], NAME_LEN - 1);
+   newHuman.name[NAME_LEN - 1] = 0;
+   return newHuman;
 }
 
 void draw(Human human) {
