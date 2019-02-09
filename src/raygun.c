@@ -8,7 +8,6 @@ static const float RAD_CONV = M_PI / 180.0;
 static const int RAY_COLOR = 6; // pink
 static const int RAY_DIST = 150;
 static const int RAY_TIMER = 350;
-enum RAY_COUNT { RAY_COUNT = 10 };
 static Ray rays[RAY_COUNT];
 static int rayIndex = -1;
 
@@ -38,6 +37,16 @@ void differentials(float *x, float *y, float *z) {
    *z = cosf(rads(-yrot));
 }
 
+void populateCurrentRayCoordinates(const float bx, const float by, const float bz,
+   const float ex, const float ey, const float ez) {
+   rays[rayIndex].start.x = bx;
+   rays[rayIndex].start.y = by;
+   rays[rayIndex].start.z = bz;
+   rays[rayIndex].end.x = ex;
+   rays[rayIndex].end.y = ey;
+   rays[rayIndex].end.z = ez;
+}
+
 void buildRayUnits(const float bx, const float by, const float bz,
    const float xchange, const float ychange, const float zchange) {
    float ex, ey, ez;
@@ -48,6 +57,7 @@ void buildRayUnits(const float bx, const float by, const float bz,
       createTube(rayIndex, bx, by, bz, ex, ey, ez, RAY_COLOR);
       humanAtPoint(ex, ey, ez);
    }
+   populateCurrentRayCoordinates(bx, by, bz, ex, ey, ez);
 }
 
 void spawnRay() {
@@ -59,7 +69,7 @@ void spawnRay() {
 
 void fireRay() {
    rayIndex = (rayIndex == RAY_COUNT - 1) ? 0 : rayIndex + 1;
-   Ray newRay = { .id = rayIndex, .spawnTime = getMsTimestamp() };
+   Ray newRay = { .id = rayIndex, .spawnTime = getMsTimestamp(), .active = true };
    rays[rayIndex] = newRay;
    spawnRay();
 }
@@ -67,6 +77,12 @@ void fireRay() {
 void fizzleRays() {
    long ts = getMsTimestamp();
    for (int i = 0; i < RAY_COUNT; i += 1)
-      if (rays[i].spawnTime + RAY_TIMER < ts)
+      if (rays[i].spawnTime + RAY_TIMER < ts) {
+         rays[i].active = false;
          hideTube(rays[i].id);
+      }
+}
+
+Ray *getRays() {
+   return rays;
 }
