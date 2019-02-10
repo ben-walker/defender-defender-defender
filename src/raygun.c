@@ -77,7 +77,7 @@ void fireRay() {
 void fizzleRays() {
    long ts = getMsTimestamp();
    for (int i = 0; i < RAY_COUNT; i += 1)
-      if (rays[i].spawnTime + RAY_TIMER < ts) {
+      if (rays[i].spawnTime + RAY_TIMER < ts && rays[i].active) {
          rays[i].active = false;
          hideTube(rays[i].id);
       }
