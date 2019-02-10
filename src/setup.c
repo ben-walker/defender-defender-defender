@@ -20,7 +20,7 @@ void initializeWorld() {
 }
 
 void setStartPosition() {
-   setViewPosition(WORLDX - 1, -WORLDY / 2, WORLDZ - 1);
+   setViewPosition(-WORLDX + 95, -WORLDY / 2, -WORLDZ + 90);
    setViewOrientation(0, Y_ORI, 0);
 }
 
