@@ -18,27 +18,28 @@ static GLfloat RAY[] = {1.0, 0.0, 0.83, 1.0};
 
 static const int HUMAN_SIZE = 2;
 
-int mapX(const int x, const int sizeMod) {
+float mapX(const int x, const float sizeMod) {
    return x + WORLDX * sizeMod;
 }
 
-int mapY(const int y, const int sizeMod) {
+float mapY(const int y, const float sizeMod) {
    return y + WORLDZ * sizeMod;
 }
 
-void drawPlayer(const int x, const int y, const int sizeMod) {
+void drawPlayer(const int x, const int y, const float sizeMod) {
    set2Dcolour(PLAYER);
+   float playerMod = sizeMod * 2;
    float fx, fy, fz;
    getViewPosition(&fx, &fy, &fz);
-   int px = -fx, pz = -fz;
+   float px = -fx, pz = -fz;
    px = x + px * sizeMod;
    pz = y + pz * sizeMod;
-   draw2Dtriangle(px, pz, px - 5, pz - 15, px + 5, pz - 15);
+   draw2Dtriangle(px, pz, px - playerMod, pz - playerMod * 3, px + playerMod, pz - playerMod * 3);
 }
 
-void drawHumans(const int x, const int y, const int sizeMod) {
+void drawHumans(const int x, const int y, const float sizeMod) {
    Human *humans = getHumans();
-   int bx, by;
+   float bx, by;
    set2Dcolour(HUMAN);
 
    for (int i = 0; i < MAX_HUMANS; i += 1) {
@@ -48,9 +49,9 @@ void drawHumans(const int x, const int y, const int sizeMod) {
    }
 }
 
-void drawRays(const int x, const int y, const int sizeMod) {
+void drawRays(const int x, const int y, const float sizeMod) {
    Ray *rays = getRays();
-   int bx, by, ex, ey;
+   float bx, by, ex, ey;
    set2Dcolour(RAY);
 
    for (int i = 0; i < RAY_COUNT; i += 1) {
@@ -64,17 +65,17 @@ void drawRays(const int x, const int y, const int sizeMod) {
    }
 }
 
-void drawBoundary(const int x, const int y, const int sizeMod) {
+void drawBoundary(const int x, const int y, const float sizeMod) {
    set2Dcolour(BACKGROUND);
    draw2Dbox(x, y, mapX(x, sizeMod), mapY(y, sizeMod));
 }
 
-void drawFrame(const int x, const int y, const int sizeMod) {
+void drawFrame(const int x, const int y, const float sizeMod) {
    set2Dcolour(FRAME);
    draw2Dbox(x - sizeMod, y - sizeMod, mapX(x, sizeMod) + sizeMod, mapY(y, sizeMod) + sizeMod);
 }
 
-void drawMap(const int x, const int y, const int sizeMod) {
+void drawMap(const int x, const int y, const float sizeMod) {
    drawPlayer(x, y, sizeMod);
    drawHumans(x, y, sizeMod);
    drawRays(x, y, sizeMod);

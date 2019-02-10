@@ -23,6 +23,8 @@
 #include <limits.h>
 #include <stdbool.h>
 
+#define min(x, y) ((x) <= (y)) ? (x) : (y)
+
 extern GLubyte  world[WORLDX][WORLDY][WORLDZ];
 
 	/* mouse function called by GLUT when a button is pressed or released */
@@ -138,12 +140,19 @@ void draw2D() {
          draw2Dbox(500, 380, 524, 388);
       }
    } else {
+      int smallDim = min(screenHeight, screenWidth);
       switch (displayMap) {
-         case 1:
-            drawMap(20, 20, 2);
+         case 1: {
+            float minMapSize = smallDim * 0.3;
+            drawMap(20, 20, minMapSize / WORLDX);
             break;
-         case 2:
-            drawMap(260, 140, 5);
+         } case 2: {
+            float bigMapSize = smallDim * 0.6;
+            int xOffset = (screenWidth / 2) - (bigMapSize / 2);
+            int yOffset = (screenHeight / 2) - (bigMapSize / 2);
+            drawMap(xOffset, yOffset, bigMapSize / WORLDX);
+            break;
+         }
       }
    }
 
