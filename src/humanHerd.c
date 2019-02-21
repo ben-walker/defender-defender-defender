@@ -82,12 +82,6 @@ void applyHumanGravity() {
    }
 }
 
-bool pointsEqual(const Point i, const Point j) {
-   return i.x == j.x &&
-      i.y == j.y &&
-      i.z == j.z;
-}
-
 void humanAtPoint(const float fx, const float fy, const float fz) {
    Point end = { fx, fy, fz, 0 };
    Human human;
