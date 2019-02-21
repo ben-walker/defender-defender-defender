@@ -26,8 +26,7 @@ void setStartPosition() {
 }
 
 void spawnSomeFolks() {
-   int yrange = (MAX_HUMAN_Y - MIN_HUMAN_Y + 1);
    srand(time(NULL));
    for (int i = 0; i < MAX_HUMANS; i++)
-      spawnHuman(rand() % WORLDX, rand() % yrange + MIN_HUMAN_Y, rand() % WORLDZ);
+      spawnHuman(rand() % WORLDX, 0, rand() % WORLDZ);
 }
