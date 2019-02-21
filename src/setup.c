@@ -1,6 +1,7 @@
 #include "setup.h"
 #include "graphics.h"
 #include "humanHerd.h"
+#include "lander.h"
 #include <time.h>
 #include <stdlib.h>
 
