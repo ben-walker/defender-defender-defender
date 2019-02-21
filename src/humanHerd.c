@@ -53,7 +53,13 @@ bool onTheGround(Human human) {
 
 void trackHumans(Human human) {
    humans[numHumans] = human;
-   numHumans++;
+   numHumans += 1;
+}
+
+void deleteHumanAt(int index) {
+   for (; index < numHumans - 1; index += 1)
+      humans[index] = humans[index + 1];
+   numHumans -= 1;
 }
 
 void adjustHumanByVector(Human *human, const int x, const int y, const int z) {
@@ -83,14 +89,15 @@ void applyHumanGravity() {
 }
 
 void humanAtPoint(const float fx, const float fy, const float fz) {
-   Point end = { fx, fy, fz, 0 };
+   Point ray = { fx, fy, fz, 0 };
    Human human;
    for (int i = 0; i < numHumans; i += 1) {
       human = humans[i];
-      if (pointsEqual(human.head, end) ||
-         pointsEqual(human.torso, end) ||
-         pointsEqual(human.legs, end))
-         printf("You hit %s!\n", human.name);
+      if (pointsEqual(human.head, ray) || pointsEqual(human.torso, ray) || pointsEqual(human.legs, ray)) {
+         erase(human);
+         printf("You lost %s!\n", human.name);
+         deleteHumanAt(i);
+      }
    }
 }
 
