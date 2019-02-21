@@ -10,8 +10,6 @@ extern void setViewPosition(float, float, float);
 extern void setViewOrientation(float, float, float);
 
 static const int Y_ORI = 135;
-static const int MAX_HUMAN_Y = 47;
-static const int MIN_HUMAN_Y = 35;
 
 void initializeWorld() {
    for (int i = 0; i < WORLDX; i++)
