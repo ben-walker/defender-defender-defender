@@ -24,7 +24,6 @@ void setStartPosition() {
 }
 
 void spawnSomeFolks() {
-   srand(time(NULL));
    for (int i = 0; i < MAX_HUMANS; i++)
       spawnHuman(rand() % WORLDX, 0, rand() % WORLDZ);
 }

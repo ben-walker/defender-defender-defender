@@ -22,6 +22,7 @@
 #include <math.h>
 #include <limits.h>
 #include <stdbool.h>
+#include <time.h>
 
 #define min(x, y) ((x) <= (y)) ? (x) : (y)
 
@@ -308,6 +309,7 @@ int main(int argc, char** argv)
 	/* create sample player */
       createPlayer(0, 52.0, 27.0, 52.0, 0.0);
    } else {
+      srand(time(NULL));
       initializeWorld();
       setStartPosition();
       buildHeightmapFrom(GROUND_FILE);
