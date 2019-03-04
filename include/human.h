@@ -2,6 +2,7 @@
 #define HUMAN_HERD_
 
 #include "point.h"
+#include <stdbool.h>
 
 enum MAX_HUMANS { MAX_HUMANS = 10 };
 enum NAME_LEN { NAME_LEN = 25 };
@@ -30,7 +31,9 @@ void spawnHuman();
 
 void applyHumanGravity();
 
-void humanAtPoint(const float x, const float y, const float z);
+void shootHuman(const int index);
+
+int humanAtPoint(const float x, const float y, const float z);
 
 Human *getHumans();
 

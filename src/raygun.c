@@ -50,12 +50,15 @@ void populateCurrentRayCoordinates(const float bx, const float by, const float b
 void buildRayUnits(const float bx, const float by, const float bz,
    const float xchange, const float ychange, const float zchange) {
    float ex, ey, ez;
+   int humanIndex;
+
    for (float i = 0.5; i < RAY_DIST; i += 0.5) {
       ex = endPoint(bx, xchange, i);
       ey = endPoint(by, ychange, i);
       ez = endPoint(bz, zchange, i);
       createTube(rayIndex, bx, by, bz, ex, ey, ez, RAY_COLOR);
-      humanAtPoint(ex, ey, ez);
+      if ((humanIndex = humanAtPoint(ex, ey, ez)) != -1)
+         shootHuman(humanIndex);
    }
    populateCurrentRayCoordinates(bx, by, bz, ex, ey, ez);
 }

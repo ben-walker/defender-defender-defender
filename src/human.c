@@ -1,6 +1,5 @@
 #include "human.h"
 #include "graphics.h"
-#include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -92,19 +91,23 @@ void applyHumanGravity() {
    }
 }
 
-void humanAtPoint(const float fx, const float fy, const float fz) {
-   Point ray = { fx, fy, fz, 0 };
-   Human human;
+void shootHuman(const int index) {
+   printf("You shot %s!\n", humans[index].name);
+   erase(humans[index]);
+   deleteHumanAt(index);
+}
+
+int humanAtPoint(const float fx, const float fy, const float fz) {
+   Point point = { fx, fy, fz, 0 };
+   int humanIndex = -1;
 
    for (int i = 0; i < numHumans; i += 1) {
-      human = humans[i];
-      if (!pointsEqual(human.head, ray) && !pointsEqual(human.torso, ray) && !pointsEqual(human.legs, ray))
-         continue;
-      printf("You shot %s!\n", human.name);
-      erase(human);
-      deleteHumanAt(i);
-      break;
+      if (pointsEqual(humans[i].head, point) ||
+         pointsEqual(humans[i].torso, point) ||
+         pointsEqual(humans[i].legs, point))
+            humanIndex = i;
    }
+   return humanIndex;
 }
 
 Human *getHumans() {
