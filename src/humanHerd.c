@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 static const int HEAD_COLOR = 1;
@@ -22,10 +23,15 @@ int findNextAvailableY(const int x, int y, const int z) {
    return y;
 }
 
-Human getNewHuman(const int x, const int botY, const int z) {
-   Point legs = { x, botY, z, LEGS_COLOR };
-   Point torso = { x, botY + 1, z, TORSO_COLOR };
-   Point head = { x, botY + 2, z, HEAD_COLOR };
+Human getNewHuman() {
+   int x = rand() % WORLDX, y = 0, z = rand() % WORLDZ;
+   if (occupied(x, y, z))
+      y = findNextAvailableY(x, y, z);
+
+   Point legs = { x, y, z, LEGS_COLOR },
+      torso = { x, y + 1, z, TORSO_COLOR },
+      head = { x, y + 2, z, HEAD_COLOR };
+
    Human newHuman = { head, torso, legs };
    strncpy(newHuman.name, NAMES[numHumans], NAME_LEN - 1);
    newHuman.name[NAME_LEN - 1] = 0;
@@ -68,12 +74,10 @@ void adjustHumanByVector(Human *human, const int x, const int y, const int z) {
    human->head.z += z; human->torso.z += z; human->legs.z += z;
 }
 
-void spawnHuman(int x, int y, int z) {
+void spawnHuman() {
    if (numHumans == MAX_HUMANS)
       return;
-   if (occupied(x, y, z))
-      y = findNextAvailableY(x, y, z);
-   Human human = getNewHuman(x, y, z);
+   Human human = getNewHuman();
    draw(human);
    trackHumans(human);
 }

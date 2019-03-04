@@ -15,6 +15,6 @@ typedef struct Lander {
    Point center;
 } Lander;
 
-void addLander();
+void spawnLander();
 
 #endif // LANDER_

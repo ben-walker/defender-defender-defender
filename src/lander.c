@@ -48,7 +48,7 @@ void trackLanders(Lander lander) {
    numLanders += 1;
 }
 
-void addLander() {
+void spawnLander() {
    if (numLanders == MAX_LANDERS)
       return;
    Lander lander = getNewLander();

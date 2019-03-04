@@ -26,7 +26,7 @@ static const char *NAMES[] = {
    "Olivia"
 };
 
-void spawnHuman(int x, int y, int z);
+void spawnHuman();
 
 void applyHumanGravity();
 
