@@ -1,6 +1,6 @@
 #include "map.h"
 #include "graphics.h"
-#include "humanHerd.h"
+#include "human.h"
 #include "raygun.h"
 #include <stdlib.h>
 

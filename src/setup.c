@@ -1,6 +1,6 @@
 #include "setup.h"
 #include "graphics.h"
-#include "humanHerd.h"
+#include "human.h"
 #include "lander.h"
 #include "pgmTranslate.h"
 #include <time.h>

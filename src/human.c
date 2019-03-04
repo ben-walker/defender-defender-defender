@@ -1,4 +1,4 @@
-#include "humanHerd.h"
+#include "human.h"
 #include "graphics.h"
 #include <stdbool.h>
 #include <string.h>

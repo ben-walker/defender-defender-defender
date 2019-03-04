@@ -1,6 +1,6 @@
 #include "raygun.h"
 #include "timeAssistant.h"
-#include "humanHerd.h"
+#include "human.h"
 #include <stdio.h>
 #include <math.h>
 

@@ -12,7 +12,7 @@
 #include "momentum.h"
 #include "momentousMovement.h"
 #include "collision.h"
-#include "humanHerd.h"
+#include "human.h"
 #include "raygun.h"
 #include "map.h"
 #include <stdio.h>
