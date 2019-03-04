@@ -1,10 +1,6 @@
 #ifndef SETUP_
 #define SETUP_
 
-void initializeWorld();
-
-void setStartPosition();
-
-void spawnSomeFolks();
+void setup();
 
 #endif // SETUP_

@@ -7,7 +7,6 @@
 /* http://www.lighthouse3d.com/opengl/glut/index.php?fps */
 
 #include "setup.h"
-#include "pgmTranslate.h"
 #include "graphics.h"
 #include "updateLever.h"
 #include "momentum.h"
@@ -101,8 +100,6 @@ extern void getUserColour(int, GLfloat *, GLfloat *, GLfloat *, GLfloat *,
     GLfloat *, GLfloat *, GLfloat *, GLfloat *); 
 
 /********* end of extern variable declarations **************/
-
-static const char *GROUND_FILE = "ground.pgm";
 
 	/*** collisionResponse() ***/
 	/* -performs collision detection and response */
@@ -270,7 +267,10 @@ int main(int argc, char** argv)
 		with dimensions of 100,50,100. */
    if (testWorld == 1) {
 	/* initialize world to empty */
-      initializeWorld();
+      for (int i = 0; i < WORLDX; i++)
+         for (int j = 0; j < WORLDY; j++)
+            for (int k = 0; k < WORLDZ; k++)
+               world[i][j][k] = 0;
 
 	/* some sample objects */
 	/* build a red platform */
@@ -309,11 +309,7 @@ int main(int argc, char** argv)
 	/* create sample player */
       createPlayer(0, 52.0, 27.0, 52.0, 0.0);
    } else {
-      srand(time(NULL));
-      initializeWorld();
-      setStartPosition();
-      buildHeightmapFrom(GROUND_FILE);
-      spawnSomeFolks();
+      setup();
    }
 
 	/* starts the graphics processing loop */

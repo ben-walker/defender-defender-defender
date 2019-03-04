@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include "humanHerd.h"
 #include "lander.h"
+#include "pgmTranslate.h"
 #include <time.h>
 #include <stdlib.h>
 
@@ -10,6 +11,7 @@ extern void setViewPosition(float, float, float);
 extern void setViewOrientation(float, float, float);
 
 static const int Y_ORI = 135;
+static const char *GROUND_FILE = "ground.pgm";
 
 void initializeWorld() {
    for (int i = 0; i < WORLDX; i++)
@@ -26,4 +28,12 @@ void setStartPosition() {
 void spawnSomeFolks() {
    for (int i = 0; i < MAX_HUMANS; i++)
       spawnHuman(rand() % WORLDX, 0, rand() % WORLDZ);
+}
+
+void setup() {
+   srand(time(NULL));
+   initializeWorld();
+   setStartPosition();
+   buildHeightmapFrom(GROUND_FILE);
+   spawnSomeFolks();
 }
