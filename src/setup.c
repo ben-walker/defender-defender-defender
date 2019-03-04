@@ -30,10 +30,17 @@ void spawnSomeFolks() {
       spawnHuman();
 }
 
+void spawnHumansAndAliens() {
+   for (int i = 0; i < MAX_HUMANS; i += 1)
+      spawnHuman();
+   for (int i = 0; i < MAX_LANDERS; i += 1)
+      spawnLander();
+}
+
 void setup() {
    srand(time(NULL));
    initializeWorld();
    setStartPosition();
    buildHeightmapFrom(GROUND_FILE);
-   spawnSomeFolks();
+   spawnHumansAndAliens();
 }
