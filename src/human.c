@@ -113,3 +113,7 @@ int humanAtPoint(const float fx, const float fy, const float fz) {
 Human *getHumans() {
    return humans;
 }
+
+int currentHumans() {
+   return numHumans;
+}

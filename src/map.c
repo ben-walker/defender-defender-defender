@@ -44,7 +44,7 @@ void drawHumans(const int x, const int y, const float sizeMod) {
    float bx, by;
    set2Dcolour(HUMAN);
 
-   for (int i = 0; i < MAX_HUMANS; i += 1) {
+   for (int i = 0; i < currentHumans(); i += 1) {
       bx = x + humans[i].legs.x * sizeMod;
       by = y + humans[i].legs.z * sizeMod;
       draw2Dbox(bx, by, bx + sizeMod * HUMAN_SIZE, by + sizeMod * HUMAN_SIZE);

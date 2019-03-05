@@ -37,4 +37,6 @@ int humanAtPoint(const float x, const float y, const float z);
 
 Human *getHumans();
 
+int currentHumans();
+
 #endif // HUMAN_HERD_
