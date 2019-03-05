@@ -31,7 +31,7 @@ void drawTopOfLander(PointF center) {
    for (int w = y + 1; w < y + 3; w += 1)
       for (int i = x - 1; i < x + 2; i+= 1)
          for (int j = z - 1; j < z + 2; j += 1)
-            world[i][w][j] = 1;
+            world[i][w][j] = 6;
 }
 
 void addEyes(PointF center) {
