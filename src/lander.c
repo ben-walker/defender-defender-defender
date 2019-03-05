@@ -73,3 +73,7 @@ void articulateLanders() {
       }
    }
 }
+
+Lander *getLanders() {
+   return landers;
+}

@@ -19,4 +19,6 @@ void spawnLander();
 
 void articulateLanders();
 
+Lander *getLanders();
+
 #endif // LANDER_
