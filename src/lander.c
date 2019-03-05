@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 
@@ -24,6 +25,8 @@ Lander getNewLander() {
       .xVec = randFl(),
       .zVec = randFl()
    };
+   strncpy(newLander.name, LANDER_NAMES[numLanders], LANDER_NAME_LEN - 1);
+   newLander.name[LANDER_NAME_LEN - 1] = 0;
    return newLander;
 }
 
@@ -100,7 +103,7 @@ void spawnLander() {
 }
 
 void shootLander(const int index) {
-   printf("You killed a Lander!\n");
+   printf("You killed %s!\n", landers[index].name);
    eraseLander(landers[index]);
    deleteLanderAt(index);
 }
