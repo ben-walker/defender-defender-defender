@@ -1,7 +1,7 @@
 #ifndef LANDER_
 #define LANDER_
 
-#include "point.h"
+#include "pointF.h"
 
 enum MAX_LANDERS { MAX_LANDERS = 5 };
 enum State {
@@ -12,7 +12,7 @@ enum State {
 
 typedef struct Lander {
    enum State state;
-   Point center;
+   PointF center;
    float xVec, zVec;
 } Lander;
 

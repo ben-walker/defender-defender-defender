@@ -1,6 +1,7 @@
 #include "lander.h"
 #include "graphics.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 
@@ -13,7 +14,7 @@ float randFl() {
 }
 
 Lander getNewLander() {
-   Point center = { rand() % WORLDX, SEARCH_HEIGHT, rand() % WORLDZ, 0 };
+   PointF center = { rand() % WORLDX, SEARCH_HEIGHT, rand() % WORLDZ };
    Lander newLander = {
       .state = searching,
       center,
@@ -23,27 +24,28 @@ Lander getNewLander() {
    return newLander;
 }
 
-void drawTopOfLander(Point center) {
-   for (int w = center.y + 1; w < center.y + 3; w += 1)
-      for (int i = center.x - 1; i < center.x + 2; i+= 1)
-         for (int j = center.z - 1; j < center.z + 2; j += 1)
+void drawTopOfLander(PointF center) {
+   int x = center.x, y = center.y, z = center.z;
+   for (int w = y + 1; w < y + 3; w += 1)
+      for (int i = x - 1; i < x + 2; i+= 1)
+         for (int j = z - 1; j < z + 2; j += 1)
             world[i][w][j] = 1;
 }
 
-void addEyes(Point center) {
-   int y = center.y + 1;
-   world[center.x + 1][y][center.z + 1] = 4;
-   world[center.x + 1][y][center.z - 1] = 4;
-   world[center.x - 1][y][center.z + 1] = 4;
-   world[center.x - 1][y][center.z - 1] = 4;
+void addEyes(PointF center) {
+   int y = center.y + 1, x = center.x, z = center.z;
+   world[x + 1][y][z + 1] = 4;
+   world[x + 1][y][z - 1] = 4;
+   world[x - 1][y][z + 1] = 4;
+   world[x - 1][y][z - 1] = 4;
 }
 
-void addLegs(Point center) {
-   int y = center.y;
-   world[center.x + 1][y][center.z + 1] = 8;
-   world[center.x + 1][y][center.z - 1] = 8;
-   world[center.x - 1][y][center.z + 1] = 8;
-   world[center.x - 1][y][center.z - 1] = 8;
+void addLegs(PointF center) {
+   int x = center.x, y = center.y, z = center.z;
+   world[x + 1][y][z + 1] = 8;
+   world[x + 1][y][z - 1] = 8;
+   world[x - 1][y][z + 1] = 8;
+   world[x - 1][y][z - 1] = 8;
 }
 
 void drawLander(Lander lander) {
@@ -53,10 +55,11 @@ void drawLander(Lander lander) {
 }
 
 void eraseLander(Lander lander) {
-   Point center = lander.center;
-   for (int w = center.y; w < center.y + 3; w += 1)
-      for (int i = center.x - 1; i < center.x + 2; i+= 1)
-         for (int j = center.z - 1; j < center.z + 2; j += 1)
+   PointF center = lander.center;
+   int x = center.x, y = center.y, z = center.z;
+   for (int w = y; w < y + 3; w += 1)
+      for (int i = x - 1; i < x + 2; i+= 1)
+         for (int j = z - 1; j < z + 2; j += 1)
             world[i][w][j] = 0;
 }
 
@@ -73,10 +76,36 @@ void spawnLander() {
    trackLanders(lander);
 }
 
+void corralLander(Lander *lander) {
+   if (lander->center.x + 1 > WORLDX) {
+      lander->center.x = WORLDX - 2;
+      lander->xVec = -lander->xVec;
+   } else if (lander->center.x < 1) {
+      lander->center.x = 1;
+      lander->xVec = -lander->xVec;
+   }
+   if (lander->center.z + 1 > WORLDZ) {
+      lander->center.z = WORLDZ - 2;
+      lander->zVec = -lander->zVec;
+   } else if (lander->center.z < 1) {
+      lander->center.z = 1;
+      lander->zVec = -lander->zVec;
+   }
+}
+
+void ambientMovement(Lander *lander) {
+   eraseLander(*lander);
+   lander->center.x += lander->xVec;
+   lander->center.z += lander->zVec;
+   corralLander(lander);
+   drawLander(*lander);
+}
+
 void articulateLanders() {
    for (int i = 0; i < numLanders; i += 1) {
       switch (landers[i].state) {
          case searching:
+            ambientMovement(&landers[i]);
             break;
          
          case pursuing:
