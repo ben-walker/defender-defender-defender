@@ -13,6 +13,7 @@ enum State {
 typedef struct Lander {
    enum State state;
    Point center;
+   float xVec, zVec;
 } Lander;
 
 void spawnLander();

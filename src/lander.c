@@ -8,9 +8,18 @@ static Lander landers[MAX_LANDERS];
 static int numLanders = 0;
 static const int SEARCH_HEIGHT = 40;
 
+float randFl() {
+   return (float) rand() / (float) RAND_MAX;
+}
+
 Lander getNewLander() {
    Point center = { rand() % WORLDX, SEARCH_HEIGHT, rand() % WORLDZ, 0 };
-   Lander newLander = { searching, center };
+   Lander newLander = {
+      .state = searching,
+      center,
+      .xVec = randFl(),
+      .zVec = randFl()
+   };
    return newLander;
 }
 
@@ -41,6 +50,14 @@ void drawLander(Lander lander) {
    drawTopOfLander(lander.center);
    addEyes(lander.center);
    addLegs(lander.center);
+}
+
+void eraseLander(Lander lander) {
+   Point center = lander.center;
+   for (int w = center.y; w < center.y + 3; w += 1)
+      for (int i = center.x - 1; i < center.x + 2; i+= 1)
+         for (int j = center.z - 1; j < center.z + 2; j += 1)
+            world[i][w][j] = 0;
 }
 
 void trackLanders(Lander lander) {
