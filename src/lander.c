@@ -77,3 +77,7 @@ void articulateLanders() {
 Lander *getLanders() {
    return landers;
 }
+
+int currentLanders() {
+   return numLanders;
+}

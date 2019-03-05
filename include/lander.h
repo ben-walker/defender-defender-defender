@@ -21,4 +21,6 @@ void articulateLanders();
 
 Lander *getLanders();
 
+int currentLanders();
+
 #endif // LANDER_
