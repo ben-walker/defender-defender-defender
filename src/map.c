@@ -4,6 +4,7 @@
 #include "raygun.h"
 #include "lander.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 extern void draw2Dbox(int, int, int, int);
 extern void draw2Dline(int, int, int, int, int);
@@ -19,6 +20,7 @@ static GLfloat FRAME[] = { 0.0, 0.0, 0.0, 1.0 };
 static GLfloat RAY[] = { 1.0, 0.0, 0.83, 1.0 };
 
 static const int HUMAN_SIZE = 2;
+static const int LANDER_SIZE = 2;
 
 float mapX(const int x, const float sizeMod) {
    return x + WORLDX * sizeMod;
@@ -52,6 +54,15 @@ void drawHumans(const int x, const int y, const float sizeMod) {
 }
 
 void drawLanders(const int x, const int y, const float sizeMod) {
+   Lander *landers = getLanders();
+   float bx, by, landerMod = sizeMod * LANDER_SIZE;
+   set2Dcolour(LANDER);
+
+   for (int i = 0; i < currentLanders(); i += 1) {
+      bx = x + landers[i].center.x * sizeMod;
+      by = y + landers[i].center.z * sizeMod;
+      draw2Dbox(bx - landerMod, by - landerMod, bx + landerMod, by + landerMod);
+   }
 }
 
 void drawRays(const int x, const int y, const float sizeMod) {
