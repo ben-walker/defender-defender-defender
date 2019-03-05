@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 static const int HEAD_COLOR = 1;
@@ -116,4 +117,14 @@ Human *getHumans() {
 
 int currentHumans() {
    return numHumans;
+}
+
+Human *findNearbyHuman(PointF start, const float maxDist) {
+   for (int i = 0; i < numHumans; i += 1) {
+      float distance = sqrt(pow(humans[i].head.x - start.x, 2) + pow(humans[i].head.z - start.z, 2));
+      if (distance > maxDist)
+         continue;
+      return &humans[i];
+   }
+   return NULL;
 }

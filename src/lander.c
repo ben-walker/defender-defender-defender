@@ -1,5 +1,6 @@
 #include "lander.h"
 #include "graphics.h"
+#include "human.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -8,6 +9,7 @@ extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 static Lander landers[MAX_LANDERS];
 static int numLanders = 0;
 static const int SEARCH_HEIGHT = 40;
+static const float RANGE = 10.0;
 
 float randFl() {
    return (float) rand() / (float) RAND_MAX;
@@ -101,11 +103,16 @@ void ambientMovement(Lander *lander) {
    drawLander(*lander);
 }
 
+void scanHorizon(Lander lander) {
+   Human *victim = findNearbyHuman(lander.center, RANGE);
+}
+
 void articulateLanders() {
    for (int i = 0; i < numLanders; i += 1) {
       switch (landers[i].state) {
          case searching:
             ambientMovement(&landers[i]);
+            scanHorizon(landers[i]);
             break;
          
          case pursuing:

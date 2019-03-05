@@ -2,6 +2,7 @@
 #define HUMAN_HERD_
 
 #include "point.h"
+#include "pointF.h"
 #include <stdbool.h>
 
 enum MAX_HUMANS { MAX_HUMANS = 10 };
@@ -38,5 +39,7 @@ int humanAtPoint(const float x, const float y, const float z);
 Human *getHumans();
 
 int currentHumans();
+
+Human *findNearbyHuman(PointF start, const float maxDist);
 
 #endif // HUMAN_HERD_
