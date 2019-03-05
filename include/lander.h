@@ -3,7 +3,7 @@
 
 #include "pointF.h"
 
-enum MAX_LANDERS { MAX_LANDERS = 5 };
+enum MAX_LANDERS { MAX_LANDERS = 3 };
 enum State {
    searching,
    pursuing,

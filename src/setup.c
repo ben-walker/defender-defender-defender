@@ -33,7 +33,7 @@ void spawnSomeFolks() {
 void spawnHumansAndAliens() {
    for (int i = 0; i < MAX_HUMANS; i += 1)
       spawnHuman();
-   for (int i = 0; i < 1; i += 1)
+   for (int i = 0; i < MAX_LANDERS; i += 1)
       spawnLander();
 }
 
