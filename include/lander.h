@@ -24,4 +24,8 @@ Lander *getLanders();
 
 int currentLanders();
 
+void shootLander(const int index);
+
+int landerAtPoint(const float fx, const float fy, const float fz);
+
 #endif // LANDER_

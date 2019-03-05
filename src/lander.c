@@ -3,6 +3,7 @@
 #include "human.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 
@@ -24,6 +25,20 @@ Lander getNewLander() {
       .zVec = randFl()
    };
    return newLander;
+}
+
+bool pointInsideLander(Lander lander, Point point) {
+   int x = lander.center.x, y = lander.center.y, z = lander.center.z;
+   for (int w = y; w < y + 3; w += 1) {
+      for (int k = x - 1; k < x + 2; k+= 1) {
+         for (int j = z - 1; j < z + 2; j += 1) {
+            Point testPoint = { k, w, j, 0 };
+            if (pointsEqual(testPoint, point))
+               return true;
+         }
+      }
+   }
+   return false;
 }
 
 void drawTopOfLander(PointF center) {
@@ -70,12 +85,34 @@ void trackLanders(Lander lander) {
    numLanders += 1;
 }
 
+void deleteLanderAt(int index) {
+   for (; index < numLanders - 1; index += 1)
+      landers[index] = landers[index + 1];
+   numLanders -= 1;
+}
+
 void spawnLander() {
    if (numLanders == MAX_LANDERS)
       return;
    Lander lander = getNewLander();
    drawLander(lander);
    trackLanders(lander);
+}
+
+void shootLander(const int index) {
+   printf("You killed a Lander!\n");
+   eraseLander(landers[index]);
+   deleteLanderAt(index);
+}
+
+int landerAtPoint(const float fx, const float fy, const float fz) {
+   Point point = { fx, fy, fz, 0 };
+
+   for (int i = 0; i < numLanders; i += 1) {
+      if (pointInsideLander(landers[i], point))
+         return i;
+   }
+   return -1;
 }
 
 void corralLander(Lander *lander) {

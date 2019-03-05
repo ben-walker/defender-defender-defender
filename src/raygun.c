@@ -1,6 +1,7 @@
 #include "raygun.h"
 #include "timeAssistant.h"
 #include "human.h"
+#include "lander.h"
 #include <stdio.h>
 #include <math.h>
 
@@ -50,7 +51,7 @@ void populateCurrentRayCoordinates(const float bx, const float by, const float b
 void buildRayUnits(const float bx, const float by, const float bz,
    const float xchange, const float ychange, const float zchange) {
    float ex, ey, ez;
-   int humanIndex;
+   int humanIndex, landerIndex;
 
    for (float i = 0.5; i < RAY_DIST; i += 0.5) {
       ex = endPoint(bx, xchange, i);
@@ -59,6 +60,8 @@ void buildRayUnits(const float bx, const float by, const float bz,
       createTube(rayIndex, bx, by, bz, ex, ey, ez, RAY_COLOR);
       if ((humanIndex = humanAtPoint(ex, ey, ez)) != -1)
          shootHuman(humanIndex);
+      if ((landerIndex = landerAtPoint(ex, ey, ez)) != -1)
+         shootLander(landerIndex);
    }
    populateCurrentRayCoordinates(bx, by, bz, ex, ey, ez);
 }
