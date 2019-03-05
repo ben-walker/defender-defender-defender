@@ -55,3 +55,21 @@ void spawnLander() {
    drawLander(lander);
    trackLanders(lander);
 }
+
+void articulateLanders() {
+   for (int i = 0; i < numLanders; i += 1) {
+      switch (landers[i].state) {
+         case searching:
+            break;
+         
+         case pursuing:
+            break;
+
+         case abducting:
+            break;
+      
+         default:
+            break;
+      }
+   }
+}

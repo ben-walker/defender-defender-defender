@@ -17,4 +17,6 @@ typedef struct Lander {
 
 void spawnLander();
 
+void articulateLanders();
+
 #endif // LANDER_

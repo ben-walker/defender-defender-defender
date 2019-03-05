@@ -15,6 +15,7 @@
 #include "human.h"
 #include "raygun.h"
 #include "map.h"
+#include "lander.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -235,6 +236,7 @@ void update() {
       if (collision())
          killMomentum();
       applyHumanGravity();
+      articulateLanders();
       logUpdate();
    }
 }
