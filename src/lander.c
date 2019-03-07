@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <math.h>
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 
@@ -160,6 +161,10 @@ void pursueTarget(Lander *lander) {
       (PointF) { lander->center.x, lander->center.y - 1, lander->center.z },
       (PointF) { (float) lander->target.head.x, (float) lander->target.head.y, (float) lander->target.head.z }
    );
+   if (fabs(vector.x) < 0.1 && fabs(vector.y) < 0.1 && fabs(vector.z) < 0.1) {
+      lander->state = abducting;
+      return;
+   }
    eraseLander(*lander);
    lander->center.x += vector.x / PURSUIT_SPEED;
    lander->center.y += vector.y / PURSUIT_SPEED;
