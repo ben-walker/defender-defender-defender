@@ -13,6 +13,7 @@ typedef struct Human {
    Point torso;
    Point legs;
    char name[NAME_LEN];
+   bool captive;
 } Human;
 
 static const char *NAMES[] = {
@@ -41,5 +42,7 @@ Human *getHumans();
 int currentHumans();
 
 Human *findNearbyHuman(PointF start, const float maxDist);
+
+void markCaptive(const char *name);
 
 #endif // HUMAN_HERD_

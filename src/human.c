@@ -32,7 +32,7 @@ Human getNewHuman() {
       torso = { x, y + 1, z, TORSO_COLOR },
       head = { x, y + 2, z, HEAD_COLOR };
 
-   Human newHuman = { head, torso, legs };
+   Human newHuman = { head, torso, legs, .captive = false };
    strncpy(newHuman.name, NAMES[numHumans], NAME_LEN - 1);
    newHuman.name[NAME_LEN - 1] = 0;
    return newHuman;
@@ -84,7 +84,7 @@ void spawnHuman() {
 
 void applyHumanGravity() {
    for (int i = 0; i < numHumans; i += 1) {
-      if (onTheGround(humans[i]))
+      if (onTheGround(humans[i]) || humans[i].captive)
          continue;
       erase(humans[i]);
       adjustHumanByVector(&humans[i], 0, -1, 0);
@@ -127,4 +127,13 @@ Human *findNearbyHuman(PointF start, const float maxDist) {
       return &humans[i];
    }
    return NULL;
+}
+
+void markCaptive(const char *name) {
+   for (int i = 0; i < numHumans; i += 1) {
+      if (strcmp(name, humans[i].name) == 0) {
+         humans[i].captive = true;
+         break;
+      }
+   }
 }

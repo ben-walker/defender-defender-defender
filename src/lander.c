@@ -163,12 +163,20 @@ void pursueTarget(Lander *lander) {
    );
    if (fabs(vector.x) < 0.1 && fabs(vector.y) < 0.1 && fabs(vector.z) < 0.1) {
       lander->state = abducting;
+      markCaptive(lander->target.name);
       return;
    }
    eraseLander(*lander);
    lander->center.x += vector.x / PURSUIT_SPEED;
    lander->center.y += vector.y / PURSUIT_SPEED;
    lander->center.z += vector.z / PURSUIT_SPEED;
+   corralLander(lander);
+   drawLander(*lander);
+}
+
+void abduct(Lander *lander) {
+   eraseLander(*lander);
+   lander->center.y += 0.15;
    corralLander(lander);
    drawLander(*lander);
 }
@@ -186,6 +194,7 @@ void articulateLanders() {
             break;
 
          case abducting:
+            abduct(&landers[i]);
             break;
       
          default:
