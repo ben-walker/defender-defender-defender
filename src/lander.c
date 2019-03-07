@@ -11,6 +11,7 @@ static Lander landers[MAX_LANDERS];
 static int numLanders = 0;
 static const int SEARCH_HEIGHT = 40;
 static const float RANGE = 10.0;
+static const float PURSUIT_SPEED = 30.0;
 
 float randFl() {
    return (float) rand() / (float) RAND_MAX;
@@ -150,8 +151,21 @@ void scanHorizon(Lander *lander) {
    lander->target = *victim;
 }
 
-void pursueTarget(Lander *lander) {
+PointF getVectorBetween(PointF start, PointF end) {
+   return (PointF) { end.x - start.x, end.y - start.y, end.z - start.z };
+}
 
+void pursueTarget(Lander *lander) {
+   PointF vector = getVectorBetween(
+      (PointF) { lander->center.x, lander->center.y - 1, lander->center.z },
+      (PointF) { (float) lander->target.head.x, (float) lander->target.head.y, (float) lander->target.head.z }
+   );
+   eraseLander(*lander);
+   lander->center.x += vector.x / PURSUIT_SPEED;
+   lander->center.y += vector.y / PURSUIT_SPEED;
+   lander->center.z += vector.z / PURSUIT_SPEED;
+   corralLander(lander);
+   drawLander(*lander);
 }
 
 void articulateLanders() {
