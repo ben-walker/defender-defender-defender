@@ -1,6 +1,5 @@
 #include "lander.h"
 #include "graphics.h"
-#include "human.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -143,8 +142,12 @@ void ambientMovement(Lander *lander) {
    drawLander(*lander);
 }
 
-void scanHorizon(Lander lander) {
-   Human *victim = findNearbyHuman(lander.center, RANGE);
+void scanHorizon(Lander *lander) {
+   Human *victim = findNearbyHuman(lander->center, RANGE);
+   if (victim == NULL)
+      return;
+   lander->state = pursuing;
+   lander->target = *victim;
 }
 
 void articulateLanders() {
@@ -152,7 +155,7 @@ void articulateLanders() {
       switch (landers[i].state) {
          case searching:
             ambientMovement(&landers[i]);
-            scanHorizon(landers[i]);
+            scanHorizon(&landers[i]);
             break;
          
          case pursuing:

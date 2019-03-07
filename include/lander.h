@@ -1,6 +1,7 @@
 #ifndef LANDER_
 #define LANDER_
 
+#include "human.h"
 #include "pointF.h"
 
 enum MAX_LANDERS { MAX_LANDERS = 3 };
@@ -16,6 +17,7 @@ typedef struct Lander {
    PointF center;
    float xVec, zVec;
    char name[LANDER_NAME_LEN];
+   Human target;
 } Lander;
 
 static const char *LANDER_NAMES[] = {
