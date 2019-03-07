@@ -150,6 +150,10 @@ void scanHorizon(Lander *lander) {
    lander->target = *victim;
 }
 
+void pursueTarget(Lander *lander) {
+
+}
+
 void articulateLanders() {
    for (int i = 0; i < numLanders; i += 1) {
       switch (landers[i].state) {
@@ -159,6 +163,7 @@ void articulateLanders() {
             break;
          
          case pursuing:
+            pursueTarget(&landers[i]);
             break;
 
          case abducting:
