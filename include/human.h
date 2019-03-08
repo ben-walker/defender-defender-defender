@@ -34,6 +34,8 @@ void shootHuman(const int index);
 
 int humanAtPoint(const float x, const float y, const float z);
 
+void adjustHumanByVector(Human *human, Point vector);
+
 Human *getHumans();
 
 int currentHumans();

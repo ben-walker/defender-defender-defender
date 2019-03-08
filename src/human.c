@@ -69,9 +69,11 @@ void deleteHumanAt(int index) {
 }
 
 void adjustHumanByVector(Human *human, Point vector) {
+   erase(*human);
    human->head.x += vector.x; human->torso.x += vector.x; human->legs.x += vector.x;
    human->head.y += vector.y; human->torso.y += vector.y; human->legs.y += vector.y;
    human->head.z += vector.z; human->torso.z += vector.z; human->legs.z += vector.z;
+   draw(*human);
 }
 
 void spawnHuman() {
@@ -86,9 +88,7 @@ void applyHumanGravity() {
    for (int i = 0; i < numHumans; i += 1) {
       if (onTheGround(humans[i]) || humans[i].captive)
          continue;
-      erase(humans[i]);
       adjustHumanByVector(&humans[i], (Point) { 0, -1, 0 });
-      draw(humans[i]);
    }
 }
 

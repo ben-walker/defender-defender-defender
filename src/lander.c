@@ -178,6 +178,7 @@ void abduct(Lander *lander) {
    lander->center.y += 0.15;
    corralLander(lander);
    drawLander(*lander);
+   adjustHumanByVector(&lander->target, (Point) { 0, 0.15, 0 });
 }
 
 void articulateLanders() {
