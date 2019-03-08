@@ -19,15 +19,14 @@ float randFl() {
 }
 
 Lander getNewLander() {
-   PointF center = { rand() % WORLDX, SEARCH_HEIGHT, rand() % WORLDZ };
+   Point center = { rand() % WORLDX, SEARCH_HEIGHT, rand() % WORLDZ };
    Lander newLander = {
       .state = searching,
-      center,
+      .center = center,
       .xVec = randFl(),
-      .zVec = randFl()
+      .zVec = randFl(),
+      .name = LANDER_NAMES[numLanders]
    };
-   strncpy(newLander.name, LANDER_NAMES[numLanders], LANDER_NAME_LEN - 1);
-   newLander.name[LANDER_NAME_LEN - 1] = 0;
    return newLander;
 }
 
@@ -36,8 +35,8 @@ bool pointInsideLander(Lander lander, Point point) {
    for (int w = y; w < y + 3; w += 1) {
       for (int k = x - 1; k < x + 2; k+= 1) {
          for (int j = z - 1; j < z + 2; j += 1) {
-            Point testPoint = { k, w, j, 0 };
-            if (pointsEqual(testPoint, point))
+            Point testPoint = { k, w, j };
+            if (pointsEqualF(testPoint, point))
                return true;
          }
       }
@@ -45,7 +44,7 @@ bool pointInsideLander(Lander lander, Point point) {
    return false;
 }
 
-void drawTopOfLander(PointF center) {
+void drawTopOfLander(Point center) {
    int x = center.x, y = center.y, z = center.z;
    for (int w = y + 1; w < y + 3; w += 1)
       for (int i = x - 1; i < x + 2; i+= 1)
@@ -53,7 +52,7 @@ void drawTopOfLander(PointF center) {
             world[i][w][j] = 6;
 }
 
-void addEyes(PointF center) {
+void addEyes(Point center) {
    int y = center.y + 1, x = center.x, z = center.z;
    world[x + 1][y][z + 1] = 4;
    world[x + 1][y][z - 1] = 4;
@@ -61,7 +60,7 @@ void addEyes(PointF center) {
    world[x - 1][y][z - 1] = 4;
 }
 
-void addLegs(PointF center) {
+void addLegs(Point center) {
    int x = center.x, y = center.y, z = center.z;
    world[x + 1][y][z + 1] = 8;
    world[x + 1][y][z - 1] = 8;
@@ -76,7 +75,7 @@ void drawLander(Lander lander) {
 }
 
 void eraseLander(Lander lander) {
-   PointF center = lander.center;
+   Point center = lander.center;
    int x = center.x, y = center.y, z = center.z;
    for (int w = y; w < y + 3; w += 1)
       for (int i = x - 1; i < x + 2; i+= 1)
@@ -110,7 +109,7 @@ void shootLander(const int index) {
 }
 
 int landerAtPoint(const float fx, const float fy, const float fz) {
-   Point point = { fx, fy, fz, 0 };
+   Point point = { fx, fy, fz };
 
    for (int i = 0; i < numLanders; i += 1) {
       if (pointInsideLander(landers[i], point))
@@ -152,14 +151,14 @@ void scanHorizon(Lander *lander) {
    lander->target = *victim;
 }
 
-PointF getVectorBetween(PointF start, PointF end) {
-   return (PointF) { end.x - start.x, end.y - start.y, end.z - start.z };
+Point getVectorBetween(Point start, Point end) {
+   return (Point) { end.x - start.x, end.y - start.y, end.z - start.z };
 }
 
 void pursueTarget(Lander *lander) {
-   PointF vector = getVectorBetween(
-      (PointF) { lander->center.x, lander->center.y - 1, lander->center.z },
-      (PointF) { (float) lander->target.head.x, (float) lander->target.head.y, (float) lander->target.head.z }
+   Point vector = getVectorBetween(
+      (Point) { lander->center.x, lander->center.y - 1, lander->center.z },
+      (Point) { (float) lander->target.head.x, (float) lander->target.head.y, (float) lander->target.head.z }
    );
    if (fabs(vector.x) < 0.1 && fabs(vector.y) < 0.1 && fabs(vector.z) < 0.1) {
       lander->state = abducting;
