@@ -13,6 +13,7 @@ static const int LEGS_COLOR = 7;
 
 static Human humans[MAX_HUMANS];
 static int numHumans = 0;
+static const float fatalHeight = 10.0;
 
 bool occupied(int x, int y, int z) {
    return world[x][y][z] != 0;
@@ -34,7 +35,8 @@ Human getNewHuman() {
       .torso = { x, y + 1, z },
       .legs = { x, y, z },
       .name = NAMES[numHumans],
-      .captive = false
+      .captive = false,
+      .fallStart = -1.0
    };
    return newHuman;
 }
@@ -69,6 +71,17 @@ void deleteHumanAt(int index) {
    numHumans -= 1;
 }
 
+void deleteHumanByName(const char *name) {
+   int i;
+   for (i = 0; i < numHumans; i += 1) {
+      if (strcmp(name, humans[i].name) == 0)
+         break;
+   }
+   if (i == numHumans)
+      return;
+   deleteHumanAt(i);
+}
+
 void adjustHumanByVector(Human *human, Point vector) {
    erase(*human);
    human->head.x += vector.x; human->torso.x += vector.x; human->legs.x += vector.x;
@@ -85,10 +98,28 @@ void spawnHuman() {
    trackHumans(human);
 }
 
+void calculateFall(Human *human) {
+   if (human->fallStart == -1.0)
+      return;
+   float fallDistance = human->fallStart - human->legs.y;
+   human->fallStart = -1.0;
+   if (fallDistance < fatalHeight)
+      return;
+   printf("%s perished after an unfortunate fall!\n", human->name);
+   erase(*human);
+   deleteHumanByName(human->name);
+}
+
 void applyHumanGravity() {
    for (int i = 0; i < numHumans; i += 1) {
-      if (onTheGround(humans[i]) || humans[i].captive)
+      if (humans[i].captive)
          continue;
+      else if (onTheGround(humans[i])) {
+         calculateFall(&humans[i]);
+         continue;
+      }
+      if (humans[i].fallStart == -1.0)
+         humans[i].fallStart = humans[i].legs.y;
       adjustHumanByVector(&humans[i], (Point) { 0, -1, 0 });
    }
 }

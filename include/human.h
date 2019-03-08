@@ -11,6 +11,7 @@ typedef struct Human {
    Point head, torso, legs;
    const char *name;
    bool captive;
+   float fallStart;
 } Human;
 
 static const char *NAMES[] = {
