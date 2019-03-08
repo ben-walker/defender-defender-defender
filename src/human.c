@@ -28,9 +28,9 @@ Human getNewHuman() {
    if (occupied(x, y, z))
       y = findNextAvailableY(x, y, z);
 
-   Point legs = { x, y, z, LEGS_COLOR },
-      torso = { x, y + 1, z, TORSO_COLOR },
-      head = { x, y + 2, z, HEAD_COLOR };
+   Point legs = { x, y, z },
+      torso = { x, y + 1, z },
+      head = { x, y + 2, z };
 
    Human newHuman = { head, torso, legs, .captive = false };
    strncpy(newHuman.name, NAMES[numHumans], NAME_LEN - 1);
@@ -40,16 +40,16 @@ Human getNewHuman() {
 
 void draw(Human human) {
    int x = human.legs.x, z = human.legs.z;
-   world[x][human.legs.y][z] = human.legs.color;
-   world[x][human.torso.y][z] = human.torso.color;
-   world[x][human.head.y][z] = human.head.color;
+   world[x][(int) human.legs.y][z] = LEGS_COLOR;
+   world[x][(int) human.torso.y][z] = TORSO_COLOR;
+   world[x][(int) human.head.y][z] = HEAD_COLOR;
 }
 
 void erase(Human human) {
    int x = human.legs.x, z = human.legs.z;
-   world[x][human.legs.y][z] = 0;
-   world[x][human.torso.y][z] = 0;
-   world[x][human.head.y][z] = 0;
+   world[x][(int) human.legs.y][z] = 0;
+   world[x][(int) human.torso.y][z] = 0;
+   world[x][(int) human.head.y][z] = 0;
 }
 
 bool onTheGround(Human human) {
@@ -99,13 +99,13 @@ void shootHuman(const int index) {
 }
 
 int humanAtPoint(const float fx, const float fy, const float fz) {
-   Point point = { fx, fy, fz, 0 };
+   Point point = { fx, fy, fz };
    int humanIndex = -1;
 
    for (int i = 0; i < numHumans; i += 1) {
-      if (pointsEqual(humans[i].head, point) ||
-         pointsEqual(humans[i].torso, point) ||
-         pointsEqual(humans[i].legs, point))
+      if (pointsEqualF(humans[i].head, point) ||
+         pointsEqualF(humans[i].torso, point) ||
+         pointsEqualF(humans[i].legs, point))
             humanIndex = i;
    }
    return humanIndex;
@@ -119,7 +119,7 @@ int currentHumans() {
    return numHumans;
 }
 
-Human *findNearbyHuman(PointF start, const float maxDist) {
+Human *findNearbyHuman(Point start, const float maxDist) {
    for (int i = 0; i < numHumans; i += 1) {
       float distance = sqrt(pow(humans[i].head.x - start.x, 2) + pow(humans[i].head.z - start.z, 2));
       if (distance > maxDist)

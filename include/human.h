@@ -2,16 +2,13 @@
 #define HUMAN_HERD_
 
 #include "point.h"
-#include "pointF.h"
 #include <stdbool.h>
 
 enum MAX_HUMANS { MAX_HUMANS = 10 };
 enum NAME_LEN { NAME_LEN = 25 };
 
 typedef struct Human {
-   Point head;
-   Point torso;
-   Point legs;
+   Point head, torso, legs;
    char name[NAME_LEN];
    bool captive;
 } Human;
@@ -41,7 +38,7 @@ Human *getHumans();
 
 int currentHumans();
 
-Human *findNearbyHuman(PointF start, const float maxDist);
+Human *findNearbyHuman(Point start, const float maxDist);
 
 void markCaptive(const char *name);
 
