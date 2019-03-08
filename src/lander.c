@@ -36,7 +36,7 @@ bool pointInsideLander(Lander lander, Point point) {
       for (int k = x - 1; k < x + 2; k+= 1) {
          for (int j = z - 1; j < z + 2; j += 1) {
             Point testPoint = { k, w, j };
-            if (pointsEqualF(testPoint, point))
+            if (pointsClose(testPoint, point))
                return true;
          }
       }
