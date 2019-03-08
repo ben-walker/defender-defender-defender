@@ -28,13 +28,13 @@ Human getNewHuman() {
    if (occupied(x, y, z))
       y = findNextAvailableY(x, y, z);
 
-   Point legs = { x, y, z },
-      torso = { x, y + 1, z },
-      head = { x, y + 2, z };
-
-   Human newHuman = { head, torso, legs, .captive = false };
-   strncpy(newHuman.name, NAMES[numHumans], NAME_LEN - 1);
-   newHuman.name[NAME_LEN - 1] = 0;
+   Human newHuman = {
+      .head = { x, y + 2, z },
+      .torso = { x, y + 1, z },
+      .legs = { x, y, z },
+      .name = NAMES[numHumans],
+      .captive = false
+   };
    return newHuman;
 }
 

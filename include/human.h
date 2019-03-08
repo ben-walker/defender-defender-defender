@@ -9,7 +9,7 @@ enum NAME_LEN { NAME_LEN = 25 };
 
 typedef struct Human {
    Point head, torso, legs;
-   char name[NAME_LEN];
+   const char *name;
    bool captive;
 } Human;
 
