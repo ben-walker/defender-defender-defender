@@ -4,10 +4,9 @@
 #include <stdbool.h>
 
 typedef struct Point {
-   int x, y, z;
-   int color;
+   float x, y, z;
 } Point;
 
-bool pointsEqual(const Point i, const Point j);
+bool pointsEqualF(const Point i, const Point j);
 
 #endif // POINT_
