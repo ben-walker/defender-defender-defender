@@ -14,7 +14,7 @@ enum State {
 
 typedef struct Lander {
    Point center;
-   Human target;
+   Human *target;
    enum State state;
    float xVec, zVec;
    const char *name;

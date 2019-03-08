@@ -148,7 +148,7 @@ void scanHorizon(Lander *lander) {
    if (victim == NULL)
       return;
    lander->state = pursuing;
-   lander->target = *victim;
+   lander->target = victim;
 }
 
 Point getVectorBetween(Point start, Point end) {
@@ -158,11 +158,11 @@ Point getVectorBetween(Point start, Point end) {
 void pursueTarget(Lander *lander) {
    Point vector = getVectorBetween(
       (Point) { lander->center.x, lander->center.y - 1, lander->center.z },
-      (Point) { (float) lander->target.head.x, (float) lander->target.head.y, (float) lander->target.head.z }
+      (Point) { (float) lander->target->head.x, (float) lander->target->head.y, (float) lander->target->head.z }
    );
    if (fabs(vector.x) < 0.1 && fabs(vector.y) < 0.1 && fabs(vector.z) < 0.1) {
       lander->state = abducting;
-      markCaptive(lander->target.name);
+      markCaptive(lander->target->name);
       return;
    }
    eraseLander(*lander);
@@ -178,7 +178,7 @@ void abduct(Lander *lander) {
    lander->center.y += 0.15;
    corralLander(lander);
    drawLander(*lander);
-   adjustHumanByVector(&lander->target, (Point) { 0, 0.15, 0 });
+   adjustHumanByVector(lander->target, (Point) { 0, 0.15, 0 });
 }
 
 void articulateLanders() {
