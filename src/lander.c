@@ -25,7 +25,8 @@ Lander getNewLander() {
       .center = center,
       .xVec = randFl(),
       .zVec = randFl(),
-      .name = LANDER_NAMES[numLanders]
+      .name = LANDER_NAMES[numLanders],
+      .target = NULL
    };
    return newLander;
 }
@@ -105,6 +106,8 @@ void spawnLander() {
 void shootLander(const int index) {
    printf("You killed %s!\n", landers[index].name);
    eraseLander(landers[index]);
+   if (landers[index].target != NULL)
+      landers[index].target->captive = false;
    deleteLanderAt(index);
 }
 
