@@ -103,9 +103,9 @@ int humanAtPoint(const float fx, const float fy, const float fz) {
    int humanIndex = -1;
 
    for (int i = 0; i < numHumans; i += 1) {
-      if (pointsEqualF(humans[i].head, point) ||
-         pointsEqualF(humans[i].torso, point) ||
-         pointsEqualF(humans[i].legs, point))
+      if (pointsClose(humans[i].head, point) ||
+         pointsClose(humans[i].torso, point) ||
+         pointsClose(humans[i].legs, point))
             humanIndex = i;
    }
    return humanIndex;
