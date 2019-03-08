@@ -7,6 +7,8 @@ typedef struct Point {
    float x, y, z;
 } Point;
 
-bool pointsEqualF(const Point i, const Point j);
+bool pointsEqual(const Point i, const Point j);
+
+bool pointsClose(const Point i, const Point j);
 
 #endif // POINT_
