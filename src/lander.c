@@ -95,6 +95,17 @@ void deleteLanderAt(int index) {
    numLanders -= 1;
 }
 
+void deleteLanderByName(const char *name) {
+   int i;
+   for (i = 0; i < numLanders; i += 1) {
+      if (strcmp(name, landers[i].name) == 0)
+         break;
+   }
+   if (i == numLanders)
+      return;
+   deleteLanderAt(i);
+}
+
 void spawnLander() {
    if (numLanders == MAX_LANDERS)
       return;
@@ -179,6 +190,10 @@ void pursueTarget(Lander *lander) {
 void abduct(Lander *lander) {
    eraseLander(*lander);
    lander->center.y += 0.15;
+   if (lander->center.y + 2 > WORLDY) {
+      deleteLanderByName(lander->name);
+      return;
+   }
    corralLander(lander);
    drawLander(*lander);
    adjustHumanByVector(lander->target, (Point) { 0, 0.15, 0 });
