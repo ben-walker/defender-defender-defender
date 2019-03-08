@@ -191,6 +191,8 @@ void abduct(Lander *lander) {
    eraseLander(*lander);
    lander->center.y += 0.15;
    if (lander->center.y + 2 > WORLDY) {
+      printf("%s abducted %s!\n", lander->name, lander->target->name);
+      abductHuman(lander->target->name);
       deleteLanderByName(lander->name);
       return;
    }

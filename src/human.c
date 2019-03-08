@@ -132,6 +132,16 @@ void shootHuman(const int index) {
    deleteHumanAt(index);
 }
 
+void abductHuman(const char *name) {
+   for (int i = 0; i < numHumans; i += 1) {
+      if (strcmp(name, humans[i].name) == 0) {
+         erase(humans[i]);
+         deleteHumanAt(i);
+         break;
+      }
+   }
+}
+
 int humanAtPoint(const float fx, const float fy, const float fz) {
    Point point = { fx, fy, fz };
    int humanIndex = -1;

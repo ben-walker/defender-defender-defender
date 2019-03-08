@@ -45,4 +45,6 @@ Human *findNearbyHuman(Point start, const float maxDist);
 
 void markCaptive(const char *name);
 
+void abductHuman(const char *name);
+
 #endif // HUMAN_HERD_
