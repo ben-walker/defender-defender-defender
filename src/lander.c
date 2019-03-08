@@ -10,7 +10,7 @@ extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 
 static Lander landers[MAX_LANDERS];
 static int numLanders = 0;
-static const int SEARCH_HEIGHT = 40;
+static const int SEARCH_HEIGHT = 35;
 static const float RANGE = 10.0;
 static const float PURSUIT_SPEED = 30.0;
 
@@ -184,6 +184,18 @@ void abduct(Lander *lander) {
    adjustHumanByVector(lander->target, (Point) { 0, 0.15, 0 });
 }
 
+void resetToSearchState(Lander *lander) {
+   eraseLander(*lander);
+   if ((int) lander->center.y > SEARCH_HEIGHT)
+      lander->center.y -= 0.15;
+   else if ((int) lander->center.y < SEARCH_HEIGHT)
+      lander->center.y += 0.15;
+   else
+      lander->state = search;
+   corralLander(lander);
+   drawLander(*lander);
+}
+
 void articulateLanders() {
    for (int i = 0; i < numLanders; i += 1) {
       switch (landers[i].state) {
@@ -201,6 +213,7 @@ void articulateLanders() {
             break;
 
          case reset:
+            resetToSearchState(&landers[i]);
             break;
 
          default:
