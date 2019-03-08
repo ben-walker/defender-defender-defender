@@ -21,7 +21,7 @@ float randFl() {
 Lander getNewLander() {
    Point center = { rand() % WORLDX, SEARCH_HEIGHT, rand() % WORLDZ };
    Lander newLander = {
-      .state = searching,
+      .state = search,
       .center = center,
       .xVec = randFl(),
       .zVec = randFl(),
@@ -150,7 +150,7 @@ void scanHorizon(Lander *lander) {
    Human *victim = findNearbyHuman(lander->center, RANGE);
    if (victim == NULL)
       return;
-   lander->state = pursuing;
+   lander->state = pursue;
    lander->target = victim;
 }
 
@@ -164,7 +164,7 @@ void pursueTarget(Lander *lander) {
       (Point) { (float) lander->target->head.x, (float) lander->target->head.y, (float) lander->target->head.z }
    );
    if (fabs(vector.x) < 0.1 && fabs(vector.y) < 0.1 && fabs(vector.z) < 0.1) {
-      lander->state = abducting;
+      lander->state = kidnap;
       markCaptive(lander->target->name);
       return;
    }
@@ -187,19 +187,22 @@ void abduct(Lander *lander) {
 void articulateLanders() {
    for (int i = 0; i < numLanders; i += 1) {
       switch (landers[i].state) {
-         case searching:
+         case search:
             ambientMovement(&landers[i]);
             scanHorizon(&landers[i]);
             break;
          
-         case pursuing:
+         case pursue:
             pursueTarget(&landers[i]);
             break;
 
-         case abducting:
+         case kidnap:
             abduct(&landers[i]);
             break;
-      
+
+         case reset:
+            break;
+
          default:
             break;
       }
@@ -212,4 +215,13 @@ Lander *getLanders() {
 
 int currentLanders() {
    return numLanders;
+}
+
+void signalLostCaptive(const char *name) {
+   for (int i = 0; i < numLanders; i += 1) {
+      if (strcmp(name, landers[i].target->name) == 0) {
+         landers[i].target = NULL;
+         landers[i].state = reset;
+      }
+   }
 }

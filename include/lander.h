@@ -7,9 +7,10 @@
 enum MAX_LANDERS { MAX_LANDERS = 3 };
 enum LANDER_NAME_LEN { LANDER_NAME_LEN = 25 };
 enum State {
-   searching,
-   pursuing,
-   abducting
+   search,
+   pursue,
+   kidnap,
+   reset
 };
 
 typedef struct Lander {
@@ -37,5 +38,7 @@ int currentLanders();
 void shootLander(const int index);
 
 int landerAtPoint(const float fx, const float fy, const float fz);
+
+void signalLostCaptive(const char *name);
 
 #endif // LANDER_
