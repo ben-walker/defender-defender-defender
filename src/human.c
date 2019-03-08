@@ -156,7 +156,7 @@ int currentHumans() {
 Human *findNearbyHuman(Point start, const float maxDist) {
    for (int i = 0; i < numHumans; i += 1) {
       float distance = sqrt(pow(humans[i].head.x - start.x, 2) + pow(humans[i].head.z - start.z, 2));
-      if (distance > maxDist)
+      if (distance > maxDist || humans[i].captive)
          continue;
       return &humans[i];
    }
