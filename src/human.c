@@ -68,10 +68,10 @@ void deleteHumanAt(int index) {
    numHumans -= 1;
 }
 
-void adjustHumanByVector(Human *human, const int x, const int y, const int z) {
-   human->head.x += x; human->torso.x += x; human->legs.x += x;
-   human->head.y += y; human->torso.y += y; human->legs.y += y;
-   human->head.z += z; human->torso.z += z; human->legs.z += z;
+void adjustHumanByVector(Human *human, Point vector) {
+   human->head.x += vector.x; human->torso.x += vector.x; human->legs.x += vector.x;
+   human->head.y += vector.y; human->torso.y += vector.y; human->legs.y += vector.y;
+   human->head.z += vector.z; human->torso.z += vector.z; human->legs.z += vector.z;
 }
 
 void spawnHuman() {
@@ -87,7 +87,7 @@ void applyHumanGravity() {
       if (onTheGround(humans[i]) || humans[i].captive)
          continue;
       erase(humans[i]);
-      adjustHumanByVector(&humans[i], 0, -1, 0);
+      adjustHumanByVector(&humans[i], (Point) { 0, -1, 0 });
       draw(humans[i]);
    }
 }
