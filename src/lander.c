@@ -175,11 +175,9 @@ void pursueTarget(Lander *lander) {
       lander->state = reset;
       return;
    }
-   Point vector = getVectorBetween(
-      (Point) { lander->center.x, lander->center.y - 1, lander->center.z },
-      (Point) { (float) lander->target->head.x, (float) lander->target->head.y, (float) lander->target->head.z }
-   );
-   if (fabs(vector.x) < 0.1 && fabs(vector.y) < 0.1 && fabs(vector.z) < 0.1) {
+   Point lerpedCenter = { (int) lander->center.x, (int) lander->center.y, (int) lander->center.z };
+   Point vector = getVectorBetween(lerpedCenter, lander->target->head);
+   if (fabs(vector.y) < 1.0) {
       lander->state = kidnap;
       markCaptive(lander->target->name);
       return;
