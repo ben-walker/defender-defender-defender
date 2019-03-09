@@ -170,7 +170,7 @@ Point getVectorBetween(Point start, Point end) {
 }
 
 void pursueTarget(Lander *lander) {
-   if (lander->target->dead) {
+   if (lander->target->dead || lander->target->captive) {
       lander->target = NULL;
       lander->state = reset;
       return;
