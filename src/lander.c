@@ -170,6 +170,11 @@ Point getVectorBetween(Point start, Point end) {
 }
 
 void pursueTarget(Lander *lander) {
+   if (lander->target->dead) {
+      lander->target = NULL;
+      lander->state = reset;
+      return;
+   }
    Point vector = getVectorBetween(
       (Point) { lander->center.x, lander->center.y - 1, lander->center.z },
       (Point) { (float) lander->target->head.x, (float) lander->target->head.y, (float) lander->target->head.z }
@@ -188,6 +193,11 @@ void pursueTarget(Lander *lander) {
 }
 
 void abduct(Lander *lander) {
+   if (lander->target->dead) {
+      lander->target = NULL;
+      lander->state = reset;
+      return;
+   }
    eraseLander(*lander);
    lander->center.y += 0.15;
    if (lander->center.y + 2 > WORLDY) {
@@ -245,13 +255,4 @@ Lander *getLanders() {
 
 int currentLanders() {
    return numLanders;
-}
-
-void signalLostCaptive(const char *name) {
-   for (int i = 0; i < numLanders; i += 1) {
-      if (strcmp(name, landers[i].target->name) == 0) {
-         landers[i].target = NULL;
-         landers[i].state = reset;
-      }
-   }
 }

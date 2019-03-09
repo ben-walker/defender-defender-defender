@@ -39,6 +39,4 @@ void shootLander(const int index);
 
 int landerAtPoint(const float fx, const float fy, const float fz);
 
-void signalLostCaptive(const char *name);
-
 #endif // LANDER_

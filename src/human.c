@@ -1,5 +1,4 @@
 #include "human.h"
-#include "lander.h"
 #include "graphics.h"
 #include <string.h>
 #include <stdio.h>
@@ -126,8 +125,6 @@ void applyHumanGravity() {
 void shootHuman(const int index) {
    printf("You shot %s!\n", humans[index].name);
    erase(humans[index]);
-   if (humans[index].captive)
-      signalLostCaptive(humans[index].name);
    deleteHumanAt(index);
 }
 
