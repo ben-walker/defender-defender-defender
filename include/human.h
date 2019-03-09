@@ -29,6 +29,8 @@ static const char *NAMES[] = {
 
 void spawnHuman();
 
+void spawnHumanCoordinates(const int x, const int y, const int z);
+
 void applyHumanGravity();
 
 void shootHuman(const int index);

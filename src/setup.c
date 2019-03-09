@@ -31,8 +31,17 @@ void spawnSomeFolks() {
 }
 
 void spawnHumansAndAliens() {
-   for (int i = 0; i < MAX_HUMANS; i += 1)
-      spawnHuman();
+   spawnHumanCoordinates(48, 0, 59);
+   spawnHumanCoordinates(52, 0, 27);
+   spawnHumanCoordinates(14, 0, 20);
+   spawnHumanCoordinates(18, 0, 61);
+   spawnHumanCoordinates(32, 0, 30);
+   spawnHumanCoordinates(18, 0, 28);
+   spawnHumanCoordinates(25, 0, 65);
+   spawnHumanCoordinates(65, 0, 56);
+   spawnHumanCoordinates(46, 0, 80);
+   spawnHumanCoordinates(32, 0, 51);
+
    for (int i = 0; i < MAX_LANDERS; i += 1)
       spawnLander();
 }

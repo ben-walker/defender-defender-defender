@@ -24,8 +24,7 @@ int findNextAvailableY(const int x, int y, const int z) {
    return y;
 }
 
-Human getNewHuman() {
-   int x = rand() % WORLDX, y = 0, z = rand() % WORLDZ;
+Human getNewHuman(int x, int y, int z) {
    if (occupied(x, y, z))
       y = findNextAvailableY(x, y, z);
 
@@ -88,12 +87,16 @@ void adjustHumanByVector(Human *human, Point vector) {
    draw(*human);
 }
 
-void spawnHuman() {
+void spawnHumanCoordinates(const int x, const int y, const int z) {
    if (numHumans == MAX_HUMANS)
       return;
-   Human human = getNewHuman();
+   Human human = getNewHuman(x, y, z);
    draw(human);
    trackHumans(human);
+}
+
+void spawnHuman() {
+   spawnHumanCoordinates(rand() % WORLDX, 0, rand() % WORLDZ);
 }
 
 void calculateFall(Human *human) {
