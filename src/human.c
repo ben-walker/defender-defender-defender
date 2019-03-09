@@ -36,6 +36,7 @@ Human getNewHuman() {
       .legs = { x, y, z },
       .name = NAMES[numHumans],
       .captive = false,
+      .dead = false,
       .fallStart = -1.0
    };
    return newHuman;
@@ -66,9 +67,7 @@ void trackHumans(Human human) {
 }
 
 void deleteHumanAt(int index) {
-   for (; index < numHumans - 1; index += 1)
-      humans[index] = humans[index + 1];
-   numHumans -= 1;
+   humans[index].dead = true;
 }
 
 void deleteHumanByName(const char *name) {
@@ -112,7 +111,7 @@ void calculateFall(Human *human) {
 
 void applyHumanGravity() {
    for (int i = 0; i < numHumans; i += 1) {
-      if (humans[i].captive)
+      if (humans[i].captive || humans[i].dead)
          continue;
       else if (onTheGround(humans[i])) {
          calculateFall(&humans[i]);
@@ -147,6 +146,8 @@ int humanAtPoint(const float fx, const float fy, const float fz) {
    int humanIndex = -1;
 
    for (int i = 0; i < numHumans; i += 1) {
+      if (humans[i].dead)
+         continue;
       if (pointsClose(humans[i].head, point) ||
          pointsClose(humans[i].torso, point) ||
          pointsClose(humans[i].legs, point))
@@ -166,7 +167,7 @@ int currentHumans() {
 Human *findNearbyHuman(Point start, const float maxDist) {
    for (int i = 0; i < numHumans; i += 1) {
       float distance = sqrt(pow(humans[i].head.x - start.x, 2) + pow(humans[i].head.z - start.z, 2));
-      if (distance > maxDist || humans[i].captive)
+      if (distance > maxDist || humans[i].captive || humans[i].dead)
          continue;
       return &humans[i];
    }
