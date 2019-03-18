@@ -6,6 +6,7 @@
 #include <math.h>
 
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
+extern void getViewPosition(float *, float *, float *);
 
 static Lander landers[MAX_LANDERS];
 static int numLanders = 0;
@@ -13,7 +14,14 @@ static const int SEARCH_HEIGHT = 35;
 static const int BODY_COLOR = 6;
 static const int SU_BODY_COLOR = 1;
 static const float RANGE = 10.0;
-static const float PURSUIT_SPEED = 30.0;
+static const float PURSUIT_MOD = 30.0;
+static const float PL_PURSUIT_MOD = 200.0;
+
+Point viewPosAsPoint() {
+   float x, y, z;
+   getViewPosition(&x, &y, &z);
+   return (Point) { -x, -y, -z };
+}
 
 float randFl() {
    return (float) rand() / (float) RAND_MAX;
@@ -187,9 +195,20 @@ void pursueTarget(Lander *lander) {
       return;
    }
    eraseLander(*lander);
-   lander->center.x += vector.x / PURSUIT_SPEED;
-   lander->center.y += vector.y / PURSUIT_SPEED;
-   lander->center.z += vector.z / PURSUIT_SPEED;
+   lander->center.x += vector.x / PURSUIT_MOD;
+   lander->center.y += vector.y / PURSUIT_MOD;
+   lander->center.z += vector.z / PURSUIT_MOD;
+   corralLander(lander);
+   drawLander(*lander);
+}
+
+void pursuePlayer(Lander *lander) {
+   Point lerpedCenter = { (int) lander->center.x, (int) lander->center.y, (int) lander->center.z };
+   Point vector = getVectorBetween(lerpedCenter, viewPosAsPoint());
+   eraseLander(*lander);
+   lander->center.x += vector.x / PL_PURSUIT_MOD;
+   lander->center.y += vector.y / PL_PURSUIT_MOD;
+   lander->center.z += vector.z / PL_PURSUIT_MOD;
    corralLander(lander);
    drawLander(*lander);
 }
@@ -227,7 +246,7 @@ void resetToSearchState(Lander *lander) {
 }
 
 void attackPlayer(Lander *lander) {
-   drawLander(*lander);
+   pursuePlayer(lander);
 }
 
 void articulateLanders() {
