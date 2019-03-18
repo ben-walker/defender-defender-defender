@@ -206,6 +206,7 @@ void abduct(Lander *lander) {
       printf("%s abducted %s!\n", lander->name, lander->target->name);
       abductHuman(lander->target->name);
       lander->super = true;
+      lander->state = attack;
       return;
    }
    corralLander(lander);
@@ -222,6 +223,10 @@ void resetToSearchState(Lander *lander) {
    else
       lander->state = search;
    corralLander(lander);
+   drawLander(*lander);
+}
+
+void attackPlayer(Lander *lander) {
    drawLander(*lander);
 }
 
@@ -243,6 +248,10 @@ void articulateLanders() {
 
          case reset:
             resetToSearchState(&landers[i]);
+            break;
+
+         case attack:
+            attackPlayer(&landers[i]);
             break;
 
          default:

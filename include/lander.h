@@ -11,7 +11,8 @@ enum State {
    search,
    pursue,
    kidnap,
-   reset
+   reset,
+   attack
 };
 
 typedef struct Lander {
