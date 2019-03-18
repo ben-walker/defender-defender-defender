@@ -2,7 +2,6 @@
 #include "graphics.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
 #include <string.h>
 #include <math.h>
 
@@ -11,6 +10,8 @@ extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 static Lander landers[MAX_LANDERS];
 static int numLanders = 0;
 static const int SEARCH_HEIGHT = 35;
+static const int BODY_COLOR = 6;
+static const int SU_BODY_COLOR = 1;
 static const float RANGE = 10.0;
 static const float PURSUIT_SPEED = 30.0;
 
@@ -26,7 +27,8 @@ Lander getNewLander() {
       .xVec = randFl(),
       .zVec = randFl(),
       .name = LANDER_NAMES[numLanders],
-      .target = NULL
+      .target = NULL,
+      .super = false
    };
    return newLander;
 }
@@ -45,12 +47,14 @@ bool pointInsideLander(Lander lander, Point point) {
    return false;
 }
 
-void drawTopOfLander(Point center) {
+void drawTopOfLander(Point center, bool super) {
    int x = center.x, y = center.y, z = center.z;
+   int color = super ? SU_BODY_COLOR : BODY_COLOR;
+
    for (int w = y + 1; w < y + 3; w += 1)
       for (int i = x - 1; i < x + 2; i+= 1)
          for (int j = z - 1; j < z + 2; j += 1)
-            world[i][w][j] = 6;
+            world[i][w][j] = color;
 }
 
 void addEyes(Point center) {
@@ -70,7 +74,7 @@ void addLegs(Point center) {
 }
 
 void drawLander(Lander lander) {
-   drawTopOfLander(lander.center);
+   drawTopOfLander(lander.center, lander.super);
    addEyes(lander.center);
    addLegs(lander.center);
 }
@@ -201,7 +205,7 @@ void abduct(Lander *lander) {
    if (lander->center.y + 2 > WORLDY) {
       printf("%s abducted %s!\n", lander->name, lander->target->name);
       abductHuman(lander->target->name);
-      deleteLanderByName(lander->name);
+      lander->super = true;
       return;
    }
    corralLander(lander);
