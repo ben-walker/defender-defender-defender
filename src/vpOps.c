@@ -7,17 +7,16 @@ extern void getViewPosition(float *, float *, float *);
 
 static const float RAD_CONV = M_PI / 180.0;
 
-void absViewPos(float *x, float *y, float *z) {
-   getViewPosition(x, y, z);
-   *x = fabsf(*x); *y = fabsf(*y); *z = fabsf(*z);
+Point absViewPos() {
+   float x, y, z;
+   getViewPosition(&x, &y, &z);
+   return (Point) { fabsf(x), fabsf(y), fabsf(z) };
 }
 
-void nextPos(float *x, float *y, float *z) {
-   float xrot, yrot, zrot;
-   getViewOrientation(&xrot, &yrot, &zrot);
-   *x = sinf(rads(-yrot));
-   *y = sinf(rads(xrot));
-   *z = cosf(rads(-yrot));
+Point nextPos() {
+   float xR, yR, zR;
+   getViewOrientation(&xR, &yR, &zR);
+   return (Point) { sinf(rads(-yR)), sinf(rads(xR)), cosf(rads(-yR)) };
 }
 
 float rads(const float deg) {

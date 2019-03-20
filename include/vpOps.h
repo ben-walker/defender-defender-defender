@@ -1,9 +1,11 @@
 #ifndef VP_OPS_
 #define VP_OPS_
 
-void absViewPos(float *x, float *y, float *z);
+#include "point.h"
 
-void nextPos(float *x, float *y, float *z);
+Point absViewPos();
+
+Point nextPos();
 
 float rads(const float deg);
 
