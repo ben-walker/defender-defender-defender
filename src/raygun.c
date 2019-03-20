@@ -25,6 +25,19 @@ float endPoint(const float pointStart, const float pointChange, const float dist
    return pointStart - pointChange * dist;
 }
 
+int nextRay() {
+   return (rayIndex == RAY_COUNT - 1) ? 0 : rayIndex + 1;
+}
+
+Ray getNewRay() {
+   Ray newRay = {
+      .id = rayIndex,
+      .spawnTime = getMsTimestamp(),
+      .active = true
+   };
+   return newRay;
+}
+
 void correctedViewPos(float *x, float *y, float *z) {
    getViewPosition(x, y, z);
    *x = -*x; *y = -*y; *z = -*z;
@@ -74,10 +87,12 @@ void spawnRay() {
 }
 
 void fireRayFromVP() {
-   rayIndex = (rayIndex == RAY_COUNT - 1) ? 0 : rayIndex + 1;
-   Ray newRay = { .id = rayIndex, .spawnTime = getMsTimestamp(), .active = true };
-   rays[rayIndex] = newRay;
+   rayIndex = nextRay();
+   rays[rayIndex] = getNewRay();
    spawnRay();
+}
+
+void fireRayFromPoint(Point start, Point end) {
 }
 
 void fizzleRays() {
