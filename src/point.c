@@ -26,3 +26,19 @@ Point getEndPoint(Point start, Point next, const float distance) {
       start.z - next.z * distance
    };
 }
+
+Point pointDivision(Point raw, const int value) {
+   return (Point) {
+      raw.x / value,
+      raw.y / value,
+      raw.z / value
+   };
+}
+
+Point addPoints(Point p1, Point p2) {
+   return (Point) {
+      p1.x + p2.x,
+      p1.y + p2.y,
+      p1.z + p2.z
+   };
+}

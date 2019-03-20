@@ -15,4 +15,8 @@ Point vectorBetween(Point start, Point end);
 
 Point getEndPoint(Point start, Point next, const float distance);
 
+Point pointDivision(Point raw, const int value);
+
+Point addPoints(Point p1, Point p2);
+
 #endif // POINT_
