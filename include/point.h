@@ -11,4 +11,6 @@ bool pointsEqual(const Point i, const Point j);
 
 bool pointsClose(const Point i, const Point j);
 
+Point vectorBetween(Point start, Point end);
+
 #endif // POINT_

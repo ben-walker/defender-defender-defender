@@ -177,10 +177,6 @@ void scanHorizon(Lander *lander) {
    lander->target = victim;
 }
 
-Point getVectorBetween(Point start, Point end) {
-   return (Point) { end.x - start.x, end.y - start.y, end.z - start.z };
-}
-
 void pursueTarget(Lander *lander) {
    if (lander->target->dead || lander->target->captive) {
       lander->target = NULL;
@@ -188,7 +184,7 @@ void pursueTarget(Lander *lander) {
       return;
    }
    Point lerpedCenter = { (int) lander->center.x, (int) lander->center.y, (int) lander->center.z };
-   Point vector = getVectorBetween(lerpedCenter, lander->target->head);
+   Point vector = vectorBetween(lerpedCenter, lander->target->head);
    if (fabs(vector.y) < 1.0) {
       lander->state = kidnap;
       markCaptive(lander->target->name);
@@ -204,7 +200,7 @@ void pursueTarget(Lander *lander) {
 
 void pursuePlayer(Lander *lander) {
    Point lerpedCenter = { (int) lander->center.x, (int) lander->center.y, (int) lander->center.z };
-   Point vector = getVectorBetween(lerpedCenter, viewPosAsPoint());
+   Point vector = vectorBetween(lerpedCenter, viewPosAsPoint());
    eraseLander(*lander);
    lander->center.x += vector.x / PL_PURSUIT_MOD;
    lander->center.y += vector.y / PL_PURSUIT_MOD;

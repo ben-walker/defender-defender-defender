@@ -14,3 +14,7 @@ bool pointsClose(const Point i, const Point j) {
    int jx = j.x, jy = j.y, jz = j.z;
    return ix == jx && iy == jy && iz == jz;
 }
+
+Point vectorBetween(Point start, Point end) {
+   return (Point) { end.x - start.x, end.y - start.y, end.z - start.z };
+}
