@@ -182,9 +182,7 @@ void pursueTarget(Lander *lander) {
       return;
    }
    eraseLander(*lander);
-   lander->center.x += vector.x / PURSUIT_MOD;
-   lander->center.y += vector.y / PURSUIT_MOD;
-   lander->center.z += vector.z / PURSUIT_MOD;
+   lander->center = addPoints(lander->center, pointDivision(vector, PURSUIT_MOD));
    corralLander(lander);
    drawLander(*lander);
 }
@@ -193,9 +191,7 @@ void pursuePlayer(Lander *lander) {
    Point lerpedCenter = { (int) lander->center.x, (int) lander->center.y, (int) lander->center.z };
    Point vector = vectorBetween(lerpedCenter, absViewPos());
    eraseLander(*lander);
-   lander->center.x += vector.x / PL_PURSUIT_MOD;
-   lander->center.y += vector.y / PL_PURSUIT_MOD;
-   lander->center.z += vector.z / PL_PURSUIT_MOD;
+   lander->center = addPoints(lander->center, pointDivision(vector, PL_PURSUIT_MOD));
    corralLander(lander);
    drawLander(*lander);
 }
