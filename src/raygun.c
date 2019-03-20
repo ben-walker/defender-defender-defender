@@ -8,7 +8,7 @@
 
 static const int RAY_COLOR = 6; // pink
 static const int RAY_DIST = 150;
-static const int RAY_TIMER = 350;
+static const int RAY_LIFESPAN = 350;
 static Ray rays[RAY_COUNT];
 static int rayIndex = -1;
 
@@ -16,6 +16,10 @@ extern void getViewOrientation(float *, float *, float *);
 extern void getViewPosition(float *, float *, float *);
 extern void createTube(int, float, float, float, float, float, float, int);
 extern void hideTube(int);
+
+bool rayInvalid(Ray ray) {
+   return (ray.spawnTime + RAY_LIFESPAN) < getMsTimestamp() && ray.active;
+}
 
 float endPoint(const float pointStart, const float pointChange, const float dist) {
    return pointStart - pointChange * dist;
@@ -71,9 +75,8 @@ void fireRayFromPoint(Point start, Point end) {
 }
 
 void fizzleRays() {
-   long ts = getMsTimestamp();
    for (int i = 0; i < RAY_COUNT; i += 1)
-      if (rays[i].spawnTime + RAY_TIMER < ts && rays[i].active) {
+      if (rayInvalid(rays[i])) {
          rays[i].active = false;
          hideTube(rays[i].id);
       }
