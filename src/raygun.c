@@ -68,12 +68,14 @@ void fireRayFromVP() {
 void fireRayFromPoint(Point start, Point end) {
 }
 
+void disableRay(Ray *ray) {
+   ray->active = false;
+   hideTube(ray->id);
+}
+
 void fizzleRays() {
    for (int i = 0; i < RAY_COUNT; i += 1)
-      if (rayInvalid(rays[i])) {
-         rays[i].active = false;
-         hideTube(rays[i].id);
-      }
+      if (rayInvalid(rays[i])) disableRay(&rays[i]);
 }
 
 Ray *getRays() {
