@@ -1,5 +1,6 @@
 #include "lander.h"
 #include "graphics.h"
+#include "vpOps.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -16,12 +17,6 @@ static const int SU_BODY_COLOR = 1;
 static const float RANGE = 10.0;
 static const float PURSUIT_MOD = 30.0;
 static const float PL_PURSUIT_MOD = 200.0;
-
-Point viewPosAsPoint() {
-   float x, y, z;
-   getViewPosition(&x, &y, &z);
-   return (Point) { -x, -y, -z };
-}
 
 float randFl() {
    return (float) rand() / (float) RAND_MAX;
@@ -196,7 +191,7 @@ void pursueTarget(Lander *lander) {
 
 void pursuePlayer(Lander *lander) {
    Point lerpedCenter = { (int) lander->center.x, (int) lander->center.y, (int) lander->center.z };
-   Point vector = vectorBetween(lerpedCenter, viewPosAsPoint());
+   Point vector = vectorBetween(lerpedCenter, absViewPos());
    eraseLander(*lander);
    lander->center.x += vector.x / PL_PURSUIT_MOD;
    lander->center.y += vector.y / PL_PURSUIT_MOD;
