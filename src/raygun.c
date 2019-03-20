@@ -2,10 +2,10 @@
 #include "timeAssistant.h"
 #include "human.h"
 #include "lander.h"
+#include "vpOps.h"
 #include <stdio.h>
 #include <math.h>
 
-static const float RAD_CONV = M_PI / 180.0;
 static const int RAY_COLOR = 6; // pink
 static const int RAY_DIST = 150;
 static const int RAY_TIMER = 350;
@@ -16,10 +16,6 @@ extern void getViewOrientation(float *, float *, float *);
 extern void getViewPosition(float *, float *, float *);
 extern void createTube(int, float, float, float, float, float, float, int);
 extern void hideTube(int);
-
-float rads(const float deg) {
-   return deg * RAD_CONV;
-}
 
 float endPoint(const float pointStart, const float pointChange, const float dist) {
    return pointStart - pointChange * dist;
@@ -36,19 +32,6 @@ Ray getNewRay() {
       .active = true
    };
    return newRay;
-}
-
-void correctedViewPos(float *x, float *y, float *z) {
-   getViewPosition(x, y, z);
-   *x = -*x; *y = -*y; *z = -*z;
-}
-
-void differentials(float *x, float *y, float *z) {
-   float xrot, yrot, zrot;
-   getViewOrientation(&xrot, &yrot, &zrot);
-   *x = sinf(rads(-yrot));
-   *y = sinf(rads(xrot));
-   *z = cosf(rads(-yrot));
 }
 
 void populateCurrentRayCoordinates(const float bx, const float by, const float bz,
@@ -81,8 +64,8 @@ void buildRayUnits(const float bx, const float by, const float bz,
 
 void spawnRay() {
    float xchange, ychange, zchange, bx, by, bz;
-   differentials(&xchange, &ychange, &zchange);
-   correctedViewPos(&bx, &by, &bz);
+   nextPos(&xchange, &ychange, &zchange);
+   absViewPos(&bx, &by, &bz);
    buildRayUnits(bx, by, bz, xchange, ychange, zchange);
 }
 
