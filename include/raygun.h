@@ -10,7 +10,7 @@ typedef struct Ray {
    int id;
    long spawnTime;
    bool active;
-   Point start, end;
+   Point start, unitVector, end;
 } Ray;
 
 void fireRayFromVP();

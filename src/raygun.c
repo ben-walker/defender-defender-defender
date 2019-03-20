@@ -6,10 +6,11 @@
 #include <stdio.h>
 #include <math.h>
 
-static const int RAY_COLOR = 6; // pink
-static const int RAY_DIST = 150;
-static const int RAY_LIFESPAN = 350;
-static Ray rays[RAY_COUNT];
+static const int RAY_COLOR = 6, // pink
+   RAY_DIST = 150,
+   RAY_LIFESPAN = 350; // ms
+static const float RAY_STEP = 0.5;
+static Ray rays[RAY_COUNT]; // 10 rays
 static int rayIndex = 0;
 
 extern void getViewOrientation(float *, float *, float *);
@@ -25,11 +26,13 @@ int nextRay() {
    return (rayIndex == RAY_COUNT - 1) ? 0 : rayIndex + 1;
 }
 
-Ray getNewRay() {
+Ray getNewRay(Point start, Point unitVector) {
    Ray newRay = {
       .id = rayIndex,
       .spawnTime = getMsTimestamp(),
-      .active = true
+      .active = true,
+      .start = start,
+      .unitVector = unitVector
    };
    return newRay;
 }
@@ -39,29 +42,31 @@ void trackRay(Ray ray) {
    rayIndex = nextRay();
 }
 
-void populateCurrentRayCoordinates(Ray *ray, Point start, Point end) {
-   ray->start = start;
-   ray->end = end;
+void spawnTube(Ray ray, Point point) {
+   createTube(ray.id, ray.start.x, ray.start.y, ray.start.z, point.x, point.y, point.z, RAY_COLOR);
 }
 
-void drawRay(Ray ray, Point start, Point change) {
-   Point end;
+void checkForHit(Point point) {
    int humanIndex, landerIndex;
+   if ((humanIndex = humanAtPoint(point)) != -1)
+      shootHuman(humanIndex);
+   if ((landerIndex = landerAtPoint(point)) != -1)
+      shootLander(landerIndex);
+}
 
-   for (float i = 0.5; i < RAY_DIST; i += 0.5) {
-      end = getEndPoint(start, change, i);
-      createTube(ray.id, start.x, start.y, start.z, end.x, end.y, end.z, RAY_COLOR);
-      if ((humanIndex = humanAtPoint(end)) != -1)
-         shootHuman(humanIndex);
-      if ((landerIndex = landerAtPoint(end)) != -1)
-         shootLander(landerIndex);
+void drawRay(Ray *ray) {
+   Point step;
+   for (float i = RAY_STEP; i < RAY_DIST; i += RAY_STEP) {
+      step = getEndPoint(ray->start, ray->unitVector, i);
+      spawnTube(*ray, step);
+      checkForHit(step);
    }
-   populateCurrentRayCoordinates(&ray, start, end);
+   ray->end = step;
 }
 
 void fireRayFromVP() {
-   Ray ray = getNewRay();
-   drawRay(ray, absViewPos(), nextPos());
+   Ray ray = getNewRay(absViewPos(), nextPos());
+   drawRay(&ray);
    trackRay(ray);
 }
 
