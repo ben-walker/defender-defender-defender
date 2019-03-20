@@ -44,35 +44,27 @@ void populateCurrentRayCoordinates(const float bx, const float by, const float b
    rays[rayIndex].end.z = ez;
 }
 
-void buildRayUnits(const float bx, const float by, const float bz,
-   const float xchange, const float ychange, const float zchange) {
+void buildRayUnits(Point start, Point end) {
    float ex, ey, ez;
    int humanIndex, landerIndex;
 
    for (float i = 0.5; i < RAY_DIST; i += 0.5) {
-      ex = endPoint(bx, xchange, i);
-      ey = endPoint(by, ychange, i);
-      ez = endPoint(bz, zchange, i);
-      createTube(rayIndex, bx, by, bz, ex, ey, ez, RAY_COLOR);
+      ex = endPoint(start.x, end.x, i);
+      ey = endPoint(start.y, end.y, i);
+      ez = endPoint(start.z, end.z, i);
+      createTube(rayIndex, start.x, start.y, start.z, ex, ey, ez, RAY_COLOR);
       if ((humanIndex = humanAtPoint(ex, ey, ez)) != -1)
          shootHuman(humanIndex);
       if ((landerIndex = landerAtPoint(ex, ey, ez)) != -1)
          shootLander(landerIndex);
    }
-   populateCurrentRayCoordinates(bx, by, bz, ex, ey, ez);
-}
-
-void spawnRay() {
-   float xchange, ychange, zchange, bx, by, bz;
-   nextPos(&xchange, &ychange, &zchange);
-   absViewPos(&bx, &by, &bz);
-   buildRayUnits(bx, by, bz, xchange, ychange, zchange);
+   populateCurrentRayCoordinates(start.x, start.y, start.z, ex, ey, ez);
 }
 
 void fireRayFromVP() {
    rayIndex = nextRay();
    rays[rayIndex] = getNewRay();
-   spawnRay();
+   buildRayUnits(absViewPos(), nextPos());
 }
 
 void fireRayFromPoint(Point start, Point end) {
