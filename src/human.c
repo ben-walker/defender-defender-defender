@@ -141,8 +141,7 @@ void abductHuman(const char *name) {
    }
 }
 
-int humanAtPoint(const float fx, const float fy, const float fz) {
-   Point point = { fx, fy, fz };
+int humanAtPoint(Point point) {
    int humanIndex = -1;
 
    for (int i = 0; i < numHumans; i += 1) {

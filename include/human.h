@@ -35,7 +35,7 @@ void applyHumanGravity();
 
 void shootHuman(const int index);
 
-int humanAtPoint(const float x, const float y, const float z);
+int humanAtPoint(Point point);
 
 void adjustHumanByVector(Human *human, Point vector);
 

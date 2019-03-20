@@ -40,6 +40,6 @@ int currentLanders();
 
 void shootLander(const int index);
 
-int landerAtPoint(const float fx, const float fy, const float fz);
+int landerAtPoint(Point point);
 
 #endif // LANDER_

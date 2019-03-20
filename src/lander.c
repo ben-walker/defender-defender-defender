@@ -134,13 +134,9 @@ void shootLander(const int index) {
    deleteLanderAt(index);
 }
 
-int landerAtPoint(const float fx, const float fy, const float fz) {
-   Point point = { fx, fy, fz };
-
-   for (int i = 0; i < numLanders; i += 1) {
-      if (pointInsideLander(landers[i], point))
-         return i;
-   }
+int landerAtPoint(Point point) {
+   for (int i = 0; i < numLanders; i += 1)
+      if (pointInsideLander(landers[i], point)) return i;
    return -1;
 }
 

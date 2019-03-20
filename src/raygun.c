@@ -46,9 +46,9 @@ void buildRayUnits(Point start, Point change) {
    for (float i = 0.5; i < RAY_DIST; i += 0.5) {
       end = getEndPoint(start, change, i);
       createTube(rayIndex, start.x, start.y, start.z, end.x, end.y, end.z, RAY_COLOR);
-      if ((humanIndex = humanAtPoint(end.x, end.y, end.z)) != -1)
+      if ((humanIndex = humanAtPoint(end)) != -1)
          shootHuman(humanIndex);
-      if ((landerIndex = landerAtPoint(end.x, end.y, end.z)) != -1)
+      if ((landerIndex = landerAtPoint(end)) != -1)
          shootLander(landerIndex);
    }
    populateCurrentRayCoordinates(start, end);
