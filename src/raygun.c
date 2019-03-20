@@ -10,7 +10,7 @@ static const int RAY_COLOR = 6; // pink
 static const int RAY_DIST = 150;
 static const int RAY_LIFESPAN = 350;
 static Ray rays[RAY_COUNT];
-static int rayIndex = -1;
+static int rayIndex = 0;
 
 extern void getViewOrientation(float *, float *, float *);
 extern void getViewPosition(float *, float *, float *);
@@ -34,30 +34,35 @@ Ray getNewRay() {
    return newRay;
 }
 
-void populateCurrentRayCoordinates(Point start, Point end) {
-   rays[rayIndex].start = start;
-   rays[rayIndex].end = end;
+void trackRay(Ray ray) {
+   rays[rayIndex] = ray;
+   rayIndex = nextRay();
 }
 
-void buildRayUnits(Point start, Point change) {
+void populateCurrentRayCoordinates(Ray *ray, Point start, Point end) {
+   ray->start = start;
+   ray->end = end;
+}
+
+void drawRay(Ray ray, Point start, Point change) {
    Point end;
    int humanIndex, landerIndex;
 
    for (float i = 0.5; i < RAY_DIST; i += 0.5) {
       end = getEndPoint(start, change, i);
-      createTube(rayIndex, start.x, start.y, start.z, end.x, end.y, end.z, RAY_COLOR);
+      createTube(ray.id, start.x, start.y, start.z, end.x, end.y, end.z, RAY_COLOR);
       if ((humanIndex = humanAtPoint(end)) != -1)
          shootHuman(humanIndex);
       if ((landerIndex = landerAtPoint(end)) != -1)
          shootLander(landerIndex);
    }
-   populateCurrentRayCoordinates(start, end);
+   populateCurrentRayCoordinates(&ray, start, end);
 }
 
 void fireRayFromVP() {
-   rayIndex = nextRay();
-   rays[rayIndex] = getNewRay();
-   buildRayUnits(absViewPos(), nextPos());
+   Ray ray = getNewRay();
+   drawRay(ray, absViewPos(), nextPos());
+   trackRay(ray);
 }
 
 void fireRayFromPoint(Point start, Point end) {
