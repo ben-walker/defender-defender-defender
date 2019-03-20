@@ -70,7 +70,10 @@ void fireRayFromVP() {
    trackRay(ray);
 }
 
-void fireRayFromPoint(Point start, Point end) {
+void fireRayFromPoint(Point start, Point unitVector) {
+   Ray ray = getNewRay(start, unitVector);
+   drawRay(&ray);
+   trackRay(ray);
 }
 
 void disableRay(Ray *ray) {
