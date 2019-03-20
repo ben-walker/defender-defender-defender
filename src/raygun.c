@@ -21,10 +21,6 @@ bool rayInvalid(Ray ray) {
    return (ray.spawnTime + RAY_LIFESPAN) < getMsTimestamp() && ray.active;
 }
 
-float endPoint(const float pointStart, const float pointChange, const float dist) {
-   return pointStart - pointChange * dist;
-}
-
 int nextRay() {
    return (rayIndex == RAY_COUNT - 1) ? 0 : rayIndex + 1;
 }
@@ -38,31 +34,24 @@ Ray getNewRay() {
    return newRay;
 }
 
-void populateCurrentRayCoordinates(const float bx, const float by, const float bz,
-   const float ex, const float ey, const float ez) {
-   rays[rayIndex].start.x = bx;
-   rays[rayIndex].start.y = by;
-   rays[rayIndex].start.z = bz;
-   rays[rayIndex].end.x = ex;
-   rays[rayIndex].end.y = ey;
-   rays[rayIndex].end.z = ez;
+void populateCurrentRayCoordinates(Point start, Point end) {
+   rays[rayIndex].start = start;
+   rays[rayIndex].end = end;
 }
 
-void buildRayUnits(Point start, Point end) {
-   float ex, ey, ez;
+void buildRayUnits(Point start, Point change) {
+   Point end;
    int humanIndex, landerIndex;
 
    for (float i = 0.5; i < RAY_DIST; i += 0.5) {
-      ex = endPoint(start.x, end.x, i);
-      ey = endPoint(start.y, end.y, i);
-      ez = endPoint(start.z, end.z, i);
-      createTube(rayIndex, start.x, start.y, start.z, ex, ey, ez, RAY_COLOR);
-      if ((humanIndex = humanAtPoint(ex, ey, ez)) != -1)
+      end = getEndPoint(start, change, i);
+      createTube(rayIndex, start.x, start.y, start.z, end.x, end.y, end.z, RAY_COLOR);
+      if ((humanIndex = humanAtPoint(end.x, end.y, end.z)) != -1)
          shootHuman(humanIndex);
-      if ((landerIndex = landerAtPoint(ex, ey, ez)) != -1)
+      if ((landerIndex = landerAtPoint(end.x, end.y, end.z)) != -1)
          shootLander(landerIndex);
    }
-   populateCurrentRayCoordinates(start.x, start.y, start.z, ex, ey, ez);
+   populateCurrentRayCoordinates(start, end);
 }
 
 void fireRayFromVP() {
