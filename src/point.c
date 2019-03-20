@@ -18,3 +18,11 @@ bool pointsClose(const Point i, const Point j) {
 Point vectorBetween(Point start, Point end) {
    return (Point) { end.x - start.x, end.y - start.y, end.z - start.z };
 }
+
+Point getEndPoint(Point start, Point next, const float distance) {
+   return (Point) {
+      start.x - next.x * distance,
+      start.y - next.y * distance,
+      start.z - next.z * distance
+   };
+}

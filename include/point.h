@@ -13,4 +13,6 @@ bool pointsClose(const Point i, const Point j);
 
 Point vectorBetween(Point start, Point end);
 
+Point getEndPoint(Point start, Point next, const float distance);
+
 #endif // POINT_
