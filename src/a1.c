@@ -250,7 +250,7 @@ void update() {
 void mouse(int button, int state, int x, int y) {
 
    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) // left mouse button
-      fireRay();
+      fireRayFromVP();
    else if (button == GLUT_MIDDLE_BUTTON) {} // middle mouse button
    else {} // right mouse button
 }

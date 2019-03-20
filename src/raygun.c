@@ -73,7 +73,7 @@ void spawnRay() {
    buildRayUnits(bx, by, bz, xchange, ychange, zchange);
 }
 
-void fireRay() {
+void fireRayFromVP() {
    rayIndex = (rayIndex == RAY_COUNT - 1) ? 0 : rayIndex + 1;
    Ray newRay = { .id = rayIndex, .spawnTime = getMsTimestamp(), .active = true };
    rays[rayIndex] = newRay;

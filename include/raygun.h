@@ -13,7 +13,7 @@ typedef struct Ray {
    Point start, end;
 } Ray;
 
-void fireRay();
+void fireRayFromVP();
 
 void fizzleRays();
 
