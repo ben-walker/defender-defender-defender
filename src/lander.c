@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include "vpOps.h"
 #include "raygun.h"
+#include "timeAssistant.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -10,14 +11,16 @@
 extern GLubyte world[WORLDX][WORLDY][WORLDZ];
 extern void getViewPosition(float *, float *, float *);
 
+static const int SEARCH_HEIGHT = 35,
+   BODY_COLOR = 6,
+   SU_BODY_COLOR = 1,
+   ATTACK_FREQ = 1000; // ms
+static const float RANGE = 10.0,
+   PURSUIT_MOD = 30.0,
+   PL_PURSUIT_MOD = 200.0;
+
 static Lander landers[MAX_LANDERS];
 static int numLanders = 0;
-static const int SEARCH_HEIGHT = 35;
-static const int BODY_COLOR = 6;
-static const int SU_BODY_COLOR = 1;
-static const float RANGE = 10.0;
-static const float PURSUIT_MOD = 30.0;
-static const float PL_PURSUIT_MOD = 200.0;
 
 float randFl() {
    return (float) rand() / (float) RAND_MAX;
@@ -32,7 +35,8 @@ Lander getNewLander() {
       .zVec = randFl(),
       .name = LANDER_NAMES[numLanders],
       .target = NULL,
-      .super = false
+      .super = false,
+      .lastAttack = 0
    };
    return newLander;
 }

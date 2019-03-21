@@ -22,6 +22,7 @@ typedef struct Lander {
    float xVec, zVec;
    const char *name;
    bool super;
+   long lastAttack;
 } Lander;
 
 static const char *LANDER_NAMES[] = {
