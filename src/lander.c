@@ -24,7 +24,7 @@ static const float RANGE = 10.0,
 static Lander landers[MAX_LANDERS];
 static int numLanders = 0;
 
-float randFl() {
+float randF() {
    return (float) rand() / (float) RAND_MAX;
 }
 
@@ -41,13 +41,9 @@ Lander getNewLander() {
    Lander newLander = {
       .state = search,
       .center = center,
-      .xVec = randFl(),
-      .zVec = randFl(),
-      .name = LANDER_NAMES[numLanders],
-      .target = NULL,
-      .super = false,
-      .lastAttack = 0,
-      .lastRecal = 0
+      .xVec = randF(),
+      .zVec = randF(),
+      .name = LANDER_NAMES[numLanders]
    };
    return newLander;
 }
