@@ -54,25 +54,28 @@ void checkForHit(Point point) {
       shootLander(landerIndex);
 }
 
-void drawRay(Ray *ray, bool playerRay) {
+void drawRay(Ray *ray, bool playerRay, const int magnitude) {
    Point step;
-   for (float i = RAY_STEP; i < RAY_DIST; i += RAY_STEP) {
+   const int dist = magnitude == -1 ? RAY_DIST : magnitude;
+
+   for (float i = RAY_STEP; i < dist; i += RAY_STEP) {
       step = getEndPoint(ray->start, ray->unitVector, i);
       spawnTube(*ray, step);
-      if (playerRay) checkForHit(step);
+      if (playerRay)
+         checkForHit(step);
    }
    ray->end = step;
 }
 
 void fireRayFromVP() {
    Ray ray = getNewRay(absViewPos(), nextPos());
-   drawRay(&ray, true);
+   drawRay(&ray, true, -1);
    trackRay(ray);
 }
 
-void fireRayFromPoint(Point start, Point unitVector) {
+void fireRayFromPoint(Point start, Point unitVector, const int magnitude) {
    Ray ray = getNewRay(start, unitVector);
-   drawRay(&ray, false);
+   drawRay(&ray, false, magnitude);
    trackRay(ray);
 }
 
