@@ -14,6 +14,7 @@ extern void getViewPosition(float *, float *, float *);
 static const int SEARCH_HEIGHT = 35,
    BODY_COLOR = 6,
    SU_BODY_COLOR = 1,
+   ATTACK_RANGE = 40,
    ATTACK_FREQ = 1500, // ms
    RECAL_FREQ = 400; // ms
 static const float RANGE = 10.0,
@@ -242,8 +243,10 @@ void resetToSearchState(Lander *lander) {
 void shootAtPlayer(Lander *lander) {
    if (!actionReady(lander->lastAttack, ATTACK_FREQ))
       return;
-   Point vector = vectorBetween(lander->center, lander->targetPosition);
-   fireRayFromPoint(lander->targetPosition, unitVector(vector), vectorMagnitude(vector));
+   Point vector = vectorBetween(lander->targetPosition, lander->center);
+   float magnitude = vectorMagnitude(vector);
+   int distance = magnitude >= ATTACK_RANGE ? ATTACK_RANGE : magnitude;
+   fireRayFromPoint(lander->center, unitVector(vector), distance);
    lander->lastAttack = getMsTimestamp();
 }
 
