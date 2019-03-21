@@ -57,6 +57,17 @@ bool pointInsideLander(Lander lander, Point point) {
    return false;
 }
 
+bool landerCollision(Lander lander) {
+   for (int i = 0; i < numLanders; i += 1) {
+      if (lander.id == i) continue;
+      for (int y = lander.center.y; y < lander.center.y + 3; y += 1)
+         for (int x = lander.center.x - 1; x < lander.center.x + 2; x += 1)
+            for (int z = lander.center.z - 1; z < lander.center.z + 2; z += 1)
+               if (pointInsideLander(landers[i], (Point) { x, y, z })) return true;
+   }
+   return false;
+}
+
 void drawTopOfLander(Point center, bool super) {
    int x = center.x, y = center.y, z = center.z;
    int color = super ? SU_BODY_COLOR : BODY_COLOR;
