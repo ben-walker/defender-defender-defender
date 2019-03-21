@@ -14,7 +14,8 @@ extern void getViewPosition(float *, float *, float *);
 static const int SEARCH_HEIGHT = 35,
    BODY_COLOR = 6,
    SU_BODY_COLOR = 1,
-   ATTACK_FREQ = 1500; // ms
+   ATTACK_FREQ = 1500, // ms
+   RECAL_FREQ = 400; // ms
 static const float RANGE = 10.0,
    PURSUIT_MOD = 30.0,
    PL_PURSUIT_MOD = 200.0;
@@ -26,8 +27,8 @@ float randFl() {
    return (float) rand() / (float) RAND_MAX;
 }
 
-bool attackReady(const long lastAttack) {
-   return getMsTimestamp() - lastAttack > ATTACK_FREQ;
+bool actionReady(const long ts, const long freq) {
+   return getMsTimestamp() - ts > freq;
 }
 
 Lander getNewLander() {
@@ -40,7 +41,8 @@ Lander getNewLander() {
       .name = LANDER_NAMES[numLanders],
       .target = NULL,
       .super = false,
-      .lastAttack = 0
+      .lastAttack = 0,
+      .lastRecal = 0
    };
    return newLander;
 }
@@ -238,15 +240,23 @@ void resetToSearchState(Lander *lander) {
 }
 
 void shootAtPlayer(Lander *lander) {
-   if (!attackReady(lander->lastAttack))
+   if (!actionReady(lander->lastAttack, ATTACK_FREQ))
       return;
-   Point vector = vectorBetween(lander->center, absViewPos());
-   fireRayFromPoint(absViewPos(), unitVector(vector));
+   Point vector = vectorBetween(lander->center, lander->targetPosition);
+   fireRayFromPoint(lander->targetPosition, unitVector(vector));
    lander->lastAttack = getMsTimestamp();
+}
+
+void recalibrateRay(Lander *lander) {
+   if (!actionReady(lander->lastRecal, RECAL_FREQ))
+      return;
+   lander->targetPosition = absViewPos();
+   lander->lastRecal = getMsTimestamp();
 }
 
 void attackPlayer(Lander *lander) {
    pursuePlayer(lander);
+   recalibrateRay(lander);
    shootAtPlayer(lander);
 }
 

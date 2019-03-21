@@ -16,13 +16,13 @@ enum State {
 };
 
 typedef struct Lander {
-   Point center;
+   Point center, targetPosition;
    Human *target;
    enum State state;
    float xVec, zVec;
    const char *name;
    bool super;
-   long lastAttack;
+   long lastAttack, lastRecal;
 } Lander;
 
 static const char *LANDER_NAMES[] = {
