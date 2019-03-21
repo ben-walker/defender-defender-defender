@@ -10,7 +10,7 @@ static const float RAD_CONV = M_PI / 180.0;
 Point absViewPos() {
    float x, y, z;
    getViewPosition(&x, &y, &z);
-   return (Point) { fabsf(x), fabsf(y), fabsf(z) };
+   return absPoint((Point) { x, y, z });
 }
 
 Point nextPos() {
