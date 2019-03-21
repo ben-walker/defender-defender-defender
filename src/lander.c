@@ -53,16 +53,10 @@ Lander getNewLander() {
 }
 
 bool pointInsideLander(Lander lander, Point point) {
-   int x = lander.center.x, y = lander.center.y, z = lander.center.z;
-   for (int w = y; w < y + 3; w += 1) {
-      for (int k = x - 1; k < x + 2; k+= 1) {
-         for (int j = z - 1; j < z + 2; j += 1) {
-            Point testPoint = { k, w, j };
-            if (pointsClose(testPoint, point))
-               return true;
-         }
-      }
-   }
+   for (int y = lander.center.y; y < lander.center.y + 3; y += 1)
+      for (int x = lander.center.x - 1; x < lander.center.x + 2; x += 1)
+         for (int z = lander.center.z - 1; z < lander.center.z + 2; z += 1)
+            if (pointsClose((Point) { x, y, z }, point)) return true;
    return false;
 }
 
