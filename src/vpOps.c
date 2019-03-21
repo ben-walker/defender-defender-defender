@@ -3,7 +3,7 @@
 #include <math.h>
 #include <stdbool.h>
 
-static const float VP_BUFFER = 0.5;
+static const float VP_BUFFER = 1.0;
 
 extern void getViewOrientation(float *, float *, float *);
 extern void getViewPosition(float *, float *, float *);
