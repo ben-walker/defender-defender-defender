@@ -54,6 +54,11 @@ void checkForHit(Point point) {
       shootLander(landerIndex);
 }
 
+void checkForPlayerHit(Point point) {
+   if (vpIntersect(point))
+      printf("You've been hit!\n");
+}
+
 void drawRay(Ray *ray, bool playerRay, const int magnitude) {
    Point step;
    const int dist = magnitude == -1 ? RAY_DIST : magnitude;
@@ -61,8 +66,7 @@ void drawRay(Ray *ray, bool playerRay, const int magnitude) {
    for (float i = RAY_STEP; i < dist; i += RAY_STEP) {
       step = getEndPoint(ray->start, ray->unitVector, i);
       spawnTube(*ray, step);
-      if (playerRay)
-         checkForHit(step);
+      playerRay ? checkForHit(step) : checkForPlayerHit(step);
    }
    ray->end = step;
 }
