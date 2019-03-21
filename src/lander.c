@@ -1,6 +1,7 @@
 #include "lander.h"
 #include "graphics.h"
 #include "vpOps.h"
+#include "raygun.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -228,8 +229,14 @@ void resetToSearchState(Lander *lander) {
    drawLander(*lander);
 }
 
+void shootAtPlayer(Lander lander) {
+   Point vector = vectorBetween(lander.center, absViewPos());
+   fireRayFromPoint(absViewPos(), unitVector(vector));
+}
+
 void attackPlayer(Lander *lander) {
    pursuePlayer(lander);
+   shootAtPlayer(*lander);
 }
 
 void articulateLanders() {
