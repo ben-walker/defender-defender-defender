@@ -1,6 +1,9 @@
 #include "vpOps.h"
 #include "graphics.h"
 #include <math.h>
+#include <stdbool.h>
+
+static const float VP_BUFFER = 0.5;
 
 extern void getViewOrientation(float *, float *, float *);
 extern void getViewPosition(float *, float *, float *);
@@ -25,4 +28,8 @@ Point nextPos() {
 
 float rads(const float deg) {
    return deg * RAD_CONV;
+}
+
+bool vpIntersect(Point point) {
+   return pointsWithin(point, absViewPos(), VP_BUFFER);
 }

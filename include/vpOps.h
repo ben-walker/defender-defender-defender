@@ -11,4 +11,6 @@ Point nextPos();
 
 float rads(const float deg);
 
+bool vpIntersect(Point point);
+
 #endif // VP_OPS_
