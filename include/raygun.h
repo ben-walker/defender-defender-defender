@@ -15,7 +15,7 @@ typedef struct Ray {
 
 void fireRayFromVP();
 
-void fireRayFromPoint(Point start, Point end);
+void fireRayFromPoint(Point start, Point unitVector);
 
 void fizzleRays();
 
