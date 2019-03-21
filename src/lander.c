@@ -32,6 +32,10 @@ bool actionReady(const long ts, const long freq) {
    return getMsTimestamp() - ts > freq;
 }
 
+bool topOfWorld(Lander lander) {
+   return lander.center.y + 2 > WORLDY;
+}
+
 Lander getNewLander() {
    Point center = { rand() % WORLDX, SEARCH_HEIGHT, rand() % WORLDZ };
    Lander newLander = {
@@ -164,12 +168,15 @@ void corralLander(Lander *lander) {
    }
 }
 
-void ambientMovement(Lander *lander) {
+void moveLander(Lander *lander, Point movementVector) {
    eraseLander(*lander);
-   lander->center.x += lander->xVec;
-   lander->center.z += lander->zVec;
+   lander->center = addPoints(lander->center, movementVector);
    corralLander(lander);
    drawLander(*lander);
+}
+
+void ambientMovement(Lander *lander) {
+   moveLander(lander, (Point) { lander->xVec, 0, lander->zVec });
 }
 
 void scanHorizon(Lander *lander) {
@@ -193,19 +200,20 @@ void pursueTarget(Lander *lander) {
       markCaptive(lander->target->name);
       return;
    }
-   eraseLander(*lander);
-   lander->center = addPoints(lander->center, pointDivision(vector, PURSUIT_MOD));
-   corralLander(lander);
-   drawLander(*lander);
+   moveLander(lander, pointDivision(vector, PURSUIT_MOD));
 }
 
 void pursuePlayer(Lander *lander) {
    Point lerpedCenter = { (int) lander->center.x, (int) lander->center.y, (int) lander->center.z };
    Point vector = vectorBetween(lerpedCenter, absViewPos());
-   eraseLander(*lander);
-   lander->center = addPoints(lander->center, pointDivision(vector, PL_PURSUIT_MOD));
-   corralLander(lander);
-   drawLander(*lander);
+   moveLander(lander, pointDivision(vector, PL_PURSUIT_MOD));
+}
+
+void performAbduction(Lander *lander) {
+   printf("%s abducted %s!\n", lander->name, lander->target->name);
+   abductHuman(lander->target->name);
+   lander->super = true;
+   lander->state = attack;
 }
 
 void abduct(Lander *lander) {
@@ -214,18 +222,10 @@ void abduct(Lander *lander) {
       lander->state = reset;
       return;
    }
-   eraseLander(*lander);
-   lander->center.y += 0.15;
-   if (lander->center.y + 2 > WORLDY) {
-      printf("%s abducted %s!\n", lander->name, lander->target->name);
-      abductHuman(lander->target->name);
-      lander->super = true;
-      lander->state = attack;
-      return;
-   }
-   corralLander(lander);
-   drawLander(*lander);
-   adjustHumanByVector(lander->target, (Point) { 0, 0.15, 0 });
+   moveLander(lander, (Point) { 0, 0.15, 0 });
+   topOfWorld(*lander)
+      ? performAbduction(lander)
+      : adjustHumanByVector(lander->target, (Point) { 0, 0.15, 0 });
 }
 
 void resetToSearchState(Lander *lander) {
