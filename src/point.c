@@ -1,18 +1,24 @@
 #include "point.h"
 #include <math.h>
 
-bool fequal(float f1, float f2) {
-   return fabs(f1 - f2) < 0.1;
+static const float DELTA = 0.1;
+
+bool fequal(float f1, float f2, float delta) {
+   return fabs(f1 - f2) < delta;
 }
 
 bool pointsEqual(const Point i, const Point j) {
-   return fequal(i.x, j.x) && fequal(i.y, j.y) && fequal(i.z, j.z);
+   return fequal(i.x, j.x, DELTA) && fequal(i.y, j.y, DELTA) && fequal(i.z, j.z, DELTA);
 }
 
 bool pointsClose(const Point i, const Point j) {
    int ix = i.x, iy = i.y, iz = i.z;
    int jx = j.x, jy = j.y, jz = j.z;
    return ix == jx && iy == jy && iz == jz;
+}
+
+bool pointsWithin(const Point i, const Point j, const float delta) {
+   return fequal(i.x, j.x, delta) && fequal(i.y, j.y, delta) && fequal(i.z, j.z, delta);
 }
 
 Point vectorBetween(Point start, Point end) {
