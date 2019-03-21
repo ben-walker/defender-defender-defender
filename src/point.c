@@ -42,3 +42,15 @@ Point addPoints(Point p1, Point p2) {
       p1.z + p2.z
    };
 }
+
+float vectorMagnitude(Point vec) {
+   return sqrtf(powf(vec.x, 2) + powf(vec.y, 2) + powf(vec.z, 2));
+}
+
+Point absPoint(Point point) {
+   return (Point) {
+      fabsf(point.x),
+      fabsf(point.y),
+      fabsf(point.z)
+   };
+}

@@ -19,4 +19,8 @@ Point pointDivision(Point raw, const int value);
 
 Point addPoints(Point p1, Point p2);
 
+float vectorMagnitude(Point vec);
+
+Point absPoint(Point point);
+
 #endif // POINT_
