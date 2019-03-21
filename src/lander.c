@@ -39,6 +39,7 @@ bool topOfWorld(Lander lander) {
 Lander getNewLander() {
    Point center = { rand() % WORLDX, SEARCH_HEIGHT, rand() % WORLDZ };
    Lander newLander = {
+      .id = numLanders,
       .state = search,
       .center = center,
       .xVec = randF(),

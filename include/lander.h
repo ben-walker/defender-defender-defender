@@ -16,6 +16,7 @@ enum State {
 };
 
 typedef struct Lander {
+   int id;
    Point center, targetPosition;
    Human *target;
    enum State state;
