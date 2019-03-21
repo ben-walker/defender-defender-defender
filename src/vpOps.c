@@ -8,9 +8,13 @@ extern void getViewPosition(float *, float *, float *);
 static const float RAD_CONV = M_PI / 180.0;
 
 Point absViewPos() {
+   return absPoint(viewPos());
+}
+
+Point viewPos() {
    float x, y, z;
    getViewPosition(&x, &y, &z);
-   return absPoint((Point) { x, y, z });
+   return (Point) { x, y, z };
 }
 
 Point nextPos() {

@@ -5,6 +5,8 @@
 
 Point absViewPos();
 
+Point viewPos();
+
 Point nextPos();
 
 float rads(const float deg);
