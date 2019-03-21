@@ -243,7 +243,7 @@ void shootAtPlayer(Lander *lander) {
    if (!actionReady(lander->lastAttack, ATTACK_FREQ))
       return;
    Point vector = vectorBetween(lander->center, lander->targetPosition);
-   fireRayFromPoint(lander->targetPosition, unitVector(vector));
+   fireRayFromPoint(lander->targetPosition, unitVector(vector), vectorMagnitude(vector));
    lander->lastAttack = getMsTimestamp();
 }
 
