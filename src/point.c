@@ -27,7 +27,7 @@ Point getEndPoint(Point start, Point next, const float distance) {
    };
 }
 
-Point pointDivision(Point raw, const int value) {
+Point pointDivision(Point raw, const float value) {
    return (Point) {
       raw.x / value,
       raw.y / value,
@@ -53,4 +53,9 @@ Point absPoint(Point point) {
       fabsf(point.y),
       fabsf(point.z)
    };
+}
+
+Point unitVector(Point vec) {
+   float magnitude = vectorMagnitude(vec);
+   return pointDivision(vec, magnitude);
 }
