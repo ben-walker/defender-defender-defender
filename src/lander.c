@@ -14,7 +14,7 @@ extern void getViewPosition(float *, float *, float *);
 static const int SEARCH_HEIGHT = 35,
    BODY_COLOR = 6,
    SU_BODY_COLOR = 1,
-   ATTACK_FREQ = 1000; // ms
+   ATTACK_FREQ = 1500; // ms
 static const float RANGE = 10.0,
    PURSUIT_MOD = 30.0,
    PL_PURSUIT_MOD = 200.0;
@@ -24,6 +24,10 @@ static int numLanders = 0;
 
 float randFl() {
    return (float) rand() / (float) RAND_MAX;
+}
+
+bool attackReady(const long lastAttack) {
+   return getMsTimestamp() - lastAttack > ATTACK_FREQ;
 }
 
 Lander getNewLander() {
@@ -233,14 +237,17 @@ void resetToSearchState(Lander *lander) {
    drawLander(*lander);
 }
 
-void shootAtPlayer(Lander lander) {
-   Point vector = vectorBetween(lander.center, absViewPos());
+void shootAtPlayer(Lander *lander) {
+   if (!attackReady(lander->lastAttack))
+      return;
+   Point vector = vectorBetween(lander->center, absViewPos());
    fireRayFromPoint(absViewPos(), unitVector(vector));
+   lander->lastAttack = getMsTimestamp();
 }
 
 void attackPlayer(Lander *lander) {
    pursuePlayer(lander);
-   shootAtPlayer(*lander);
+   shootAtPlayer(lander);
 }
 
 void articulateLanders() {
