@@ -262,26 +262,27 @@ void attackPlayer(Lander *lander) {
 
 void articulateLanders() {
    for (int i = 0; i < numLanders; i += 1) {
-      switch (landers[i].state) {
+      Lander *lander = &landers[i];
+      switch (lander->state) {
          case search:
-            ambientMovement(&landers[i]);
-            scanHorizon(&landers[i]);
+            ambientMovement(lander);
+            scanHorizon(lander);
             break;
          
          case pursue:
-            pursueTarget(&landers[i]);
+            pursueTarget(lander);
             break;
 
          case kidnap:
-            abduct(&landers[i]);
+            abduct(lander);
             break;
 
          case reset:
-            resetToSearchState(&landers[i]);
+            resetToSearchState(lander);
             break;
 
          case attack:
-            attackPlayer(&landers[i]);
+            attackPlayer(lander);
             break;
 
          default:
