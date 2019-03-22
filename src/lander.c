@@ -15,14 +15,23 @@ static const int SEARCH_HEIGHT = 35,
    BODY_COLOR = 6,
    SU_BODY_COLOR = 1,
    ATTACK_RANGE = 40,
+   BOUNCE_TIME = 2000, // ms
    ATTACK_FREQ = 1500, // ms
    RECAL_FREQ = 400; // ms
 static const float RANGE = 10.0,
    PURSUIT_MOD = 30.0,
-   PL_PURSUIT_MOD = 200.0;
+   PL_PURSUIT_MOD = 200.0,
+   RISE_SPEED = 0.15;
 
 static Lander landers[MAX_LANDERS];
 static int numLanders = 0;
+
+void dropCaptive(Lander *lander) {
+   if (lander->target != NULL) {
+      lander->target->captive = false;
+      lander->target = NULL;
+   }
+}
 
 float randF() {
    return (float) rand() / (float) RAND_MAX;
@@ -57,15 +66,15 @@ bool pointInsideLander(Lander lander, Point point) {
    return false;
 }
 
-bool landerCollision(Lander lander) {
+int landerCollision(Lander lander) {
    for (int i = 0; i < numLanders; i += 1) {
       if (lander.id == i) continue;
       for (int y = lander.center.y; y < lander.center.y + 3; y += 1)
          for (int x = lander.center.x - 1; x < lander.center.x + 2; x += 1)
             for (int z = lander.center.z - 1; z < lander.center.z + 2; z += 1)
-               if (pointInsideLander(landers[i], (Point) { x, y, z })) return true;
+               if (pointInsideLander(landers[i], (Point) { x, y, z })) return i;
    }
-   return false;
+   return -1;
 }
 
 void drawTopOfLander(Point center, bool super) {
@@ -115,9 +124,7 @@ void trackLanders(Lander lander) {
 }
 
 void deleteLanderAt(int index) {
-   for (; index < numLanders - 1; index += 1)
-      landers[index] = landers[index + 1];
-   numLanders -= 1;
+   landers[index].dead = true;
 }
 
 void deleteLanderByName(const char *name) {
@@ -142,14 +149,15 @@ void spawnLander() {
 void shootLander(const int index) {
    printf("You killed %s!\n", landers[index].name);
    eraseLander(landers[index]);
-   if (landers[index].target != NULL)
-      landers[index].target->captive = false;
+   dropCaptive(&landers[index]);
    deleteLanderAt(index);
 }
 
 int landerAtPoint(Point point) {
-   for (int i = 0; i < numLanders; i += 1)
+   for (int i = 0; i < numLanders; i += 1) {
+      if (landers[i].dead) continue;
       if (pointInsideLander(landers[i], point)) return i;
+   }
    return -1;
 }
 
@@ -170,10 +178,26 @@ void corralLander(Lander *lander) {
    }
 }
 
+void setLanderToBounce(Lander *lander) {
+   if (lander->state != bounce) {
+      lander->prevState = lander->state;
+      lander->state = bounce;
+   }
+   lander->bounceStart = getMsTimestamp();
+   lander->xVec = -lander->xVec;
+   lander->zVec = -lander->zVec;
+   dropCaptive(lander);
+}
+
 void moveLander(Lander *lander, Point movementVector) {
+   int collisionIndex;
    eraseLander(*lander);
    lander->center = addPoints(lander->center, movementVector);
    corralLander(lander);
+   if ((collisionIndex = landerCollision(*lander)) != -1) {
+      setLanderToBounce(lander);
+      setLanderToBounce(&landers[collisionIndex]);
+   }
    drawLander(*lander);
 }
 
@@ -190,7 +214,7 @@ void scanHorizon(Lander *lander) {
 }
 
 void pursueTarget(Lander *lander) {
-   if (lander->target->dead || lander->target->captive) {
+   if (lander->target == NULL || lander->target->dead || lander->target->captive) {
       lander->target = NULL;
       lander->state = reset;
       return;
@@ -219,27 +243,25 @@ void performAbduction(Lander *lander) {
 }
 
 void abduct(Lander *lander) {
-   if (lander->target->dead) {
+   if (lander->target == NULL || lander->target->dead) {
       lander->target = NULL;
       lander->state = reset;
       return;
    }
-   moveLander(lander, (Point) { 0, 0.15, 0 });
+   moveLander(lander, (Point) { 0, RISE_SPEED, 0 });
    topOfWorld(*lander)
       ? performAbduction(lander)
-      : adjustHumanByVector(lander->target, (Point) { 0, 0.15, 0 });
+      : adjustHumanByVector(lander->target, (Point) { 0, RISE_SPEED, 0 });
 }
 
 void resetToSearchState(Lander *lander) {
-   eraseLander(*lander);
-   if ((int) lander->center.y > SEARCH_HEIGHT)
-      lander->center.y -= 0.15;
-   else if ((int) lander->center.y < SEARCH_HEIGHT)
-      lander->center.y += 0.15;
-   else
+   if ((int) lander->center.y == SEARCH_HEIGHT) {
       lander->state = search;
-   corralLander(lander);
-   drawLander(*lander);
+      return;
+   }
+   Point vector = { 0, 0, 0 };
+   vector.y = (lander->center.y > SEARCH_HEIGHT) ? -RISE_SPEED : RISE_SPEED;
+   moveLander(lander, vector);
 }
 
 void shootAtPlayer(Lander *lander) {
@@ -265,9 +287,17 @@ void attackPlayer(Lander *lander) {
    shootAtPlayer(lander);
 }
 
+void bounceLander(Lander *lander) {
+   ambientMovement(lander);
+   if (actionReady(lander->bounceStart, BOUNCE_TIME))
+      lander->state = lander->prevState;
+}
+
 void articulateLanders() {
    for (int i = 0; i < numLanders; i += 1) {
       Lander *lander = &landers[i];
+      if (lander->dead) continue;
+
       switch (lander->state) {
          case search:
             ambientMovement(lander);
@@ -288,6 +318,10 @@ void articulateLanders() {
 
          case attack:
             attackPlayer(lander);
+            break;
+
+         case bounce:
+            bounceLander(lander);
             break;
 
          default:
