@@ -179,26 +179,31 @@ void corralLander(Lander *lander) {
    }
 }
 
-void setLanderToBounce(Lander *lander) {
+void setLanderToBounce(Lander *lander, float xVec, float zVec) {
    if (lander->state != bounce) {
       lander->prevState = lander->state;
       lander->state = bounce;
    }
    lander->bounceStart = getMsTimestamp();
-   lander->xVec = -lander->xVec;
-   lander->zVec = -lander->zVec;
+   lander->xVec = xVec;
+   lander->zVec = zVec;
    dropCaptive(lander);
 }
 
-void moveLander(Lander *lander, Point movementVector) {
+void detectLanderCollisions(Lander *lander) {
    int collisionIndex;
+   if ((collisionIndex = landerCollision(*lander)) != -1) {
+      float xVec = randF(), zVec = randF();
+      setLanderToBounce(lander, xVec, zVec);
+      setLanderToBounce(&landers[collisionIndex], -xVec, -zVec);
+   }
+}
+
+void moveLander(Lander *lander, Point movementVector) {
    eraseLander(*lander);
    lander->center = addPoints(lander->center, movementVector);
    corralLander(lander);
-   if ((collisionIndex = landerCollision(*lander)) != -1) {
-      setLanderToBounce(lander);
-      setLanderToBounce(&landers[collisionIndex]);
-   }
+   detectLanderCollisions(lander);
    drawLander(*lander);
 }
 
