@@ -11,7 +11,7 @@ static const float PREDICTIVE = 1.9;
 static const float VIC = 0.4;
 
 bool rawOccupied(const float x, const float y, const float z) {
-   return world[(int) -x][(int) -y][(int) -z] != 0;
+   return world[(int) -x][(int) -y][(int) -z] == 2;
 }
 
 float bind(const float point, const float dimension) {
