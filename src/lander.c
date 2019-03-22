@@ -68,7 +68,7 @@ bool pointInsideLander(Lander lander, Point point) {
 
 int landerCollision(Lander lander) {
    for (int i = 0; i < numLanders; i += 1) {
-      if (lander.id == i || lander.dead) continue;
+      if (lander.id == i || landers[i].dead) continue;
       for (int y = lander.center.y; y < lander.center.y + 3; y += 1)
          for (int x = lander.center.x - 1; x < lander.center.x + 2; x += 1)
             for (int z = lander.center.z - 1; z < lander.center.z + 2; z += 1)
@@ -104,6 +104,7 @@ void addLegs(Point center) {
 }
 
 void drawLander(Lander lander) {
+   if (lander.dead) return;
    drawTopOfLander(lander.center, lander.super);
    addEyes(lander.center);
    addLegs(lander.center);
