@@ -15,6 +15,7 @@ extern void getViewPosition(float *, float *, float *);
 static GLfloat PLAYER[] = { 0.0, 0.0, 0.0, 1.0 };
 static GLfloat HUMAN[] = { 0.01, 0.18, 0.76, 1.0 };
 static GLfloat LANDER[] = { 1.0, 0.0, 0.0, 1.0 };
+static GLfloat SU_LANDER[] = { 0.2, 1.0, 0.0, 1.0 };
 static GLfloat BACKGROUND[] = { 1.0, 0.35, 0.0, 0.8 };
 static GLfloat FRAME[] = { 0.0, 0.0, 0.0, 1.0 };
 static GLfloat RAY[] = { 1.0, 0.0, 0.83, 1.0 };
@@ -58,10 +59,10 @@ void drawHumans(const int x, const int y, const float sizeMod) {
 void drawLanders(const int x, const int y, const float sizeMod) {
    Lander *landers = getLanders();
    float bx, by, landerMod = sizeMod * LANDER_SIZE;
-   set2Dcolour(LANDER);
 
    for (int i = 0; i < currentLanders(); i += 1) {
       if (landers[i].dead) continue;
+      landers[i].super ? set2Dcolour(SU_LANDER) : set2Dcolour(LANDER);
       bx = x + landers[i].center.x * sizeMod;
       by = y + landers[i].center.z * sizeMod;
       draw2Dbox(bx - landerMod, by - landerMod, bx + landerMod, by + landerMod);
