@@ -21,7 +21,7 @@ typedef struct Lander {
    Point center, targetPosition;
    Human *target;
    enum State state, prevState;
-   float xVec, zVec;
+   float xVec, yVec, zVec;
    const char *name;
    bool super, dead;
    long lastAttack, lastRecal, bounceStart;
