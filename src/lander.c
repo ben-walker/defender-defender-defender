@@ -42,7 +42,7 @@ bool actionReady(const long ts, const long freq) {
 }
 
 bool topOfWorld(Lander lander) {
-   return lander.center.y + 2 > WORLDY;
+   return lander.center.y + 4 > WORLDY;
 }
 
 Lander getNewLander() {
@@ -75,6 +75,14 @@ int landerCollision(Lander lander) {
                if (pointInsideLander(landers[i], (Point) { x, y, z })) return i;
    }
    return -1;
+}
+
+bool groundCollision(Lander lander) {
+   for (int y = lander.center.y; y < lander.center.y + 3; y += 1)
+      for (int x = lander.center.x - 1; x < lander.center.x + 2; x += 1)
+         for (int z = lander.center.z - 1; z < lander.center.z + 2; z += 1)
+            if (world[x][y][z] == 2) return true;
+   return false;
 }
 
 void drawTopOfLander(Point center, bool super) {
@@ -179,13 +187,14 @@ void corralLander(Lander *lander) {
    }
 }
 
-void setLanderToBounce(Lander *lander, float xVec, float zVec) {
+void setLanderToBounce(Lander *lander, float xVec, float yVec, float zVec) {
    if (lander->state != bounce) {
       lander->prevState = lander->state;
       lander->state = bounce;
    }
    lander->bounceStart = getMsTimestamp();
    lander->xVec = xVec;
+   lander->yVec = yVec;
    lander->zVec = zVec;
    dropCaptive(lander);
 }
@@ -194,9 +203,11 @@ void detectLanderCollisions(Lander *lander) {
    int collisionIndex;
    if ((collisionIndex = landerCollision(*lander)) != -1) {
       float xVec = randF(), zVec = randF();
-      setLanderToBounce(lander, xVec, zVec);
-      setLanderToBounce(&landers[collisionIndex], -xVec, -zVec);
+      setLanderToBounce(lander, xVec, 0, zVec);
+      setLanderToBounce(&landers[collisionIndex], -xVec, 0, -zVec);
    }
+   if (groundCollision(*lander))
+      setLanderToBounce(lander, 0, RISE_SPEED, 0);
 }
 
 void moveLander(Lander *lander, Point movementVector) {
@@ -208,7 +219,7 @@ void moveLander(Lander *lander, Point movementVector) {
 }
 
 void ambientMovement(Lander *lander) {
-   moveLander(lander, (Point) { lander->xVec, 0, lander->zVec });
+   moveLander(lander, (Point) { lander->xVec, lander->yVec, lander->zVec });
 }
 
 void scanHorizon(Lander *lander) {
@@ -296,8 +307,10 @@ void attackPlayer(Lander *lander) {
 
 void bounceLander(Lander *lander) {
    ambientMovement(lander);
-   if (actionReady(lander->bounceStart, BOUNCE_TIME))
+   if (actionReady(lander->bounceStart, BOUNCE_TIME)) {
       lander->state = lander->prevState;
+      lander->xVec = randF(); lander->yVec = 0; lander->zVec = randF();
+   }
 }
 
 void articulateLanders() {
