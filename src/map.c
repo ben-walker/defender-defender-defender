@@ -61,6 +61,7 @@ void drawLanders(const int x, const int y, const float sizeMod) {
    set2Dcolour(LANDER);
 
    for (int i = 0; i < currentLanders(); i += 1) {
+      if (landers[i].dead) continue;
       bx = x + landers[i].center.x * sizeMod;
       by = y + landers[i].center.z * sizeMod;
       draw2Dbox(bx - landerMod, by - landerMod, bx + landerMod, by + landerMod);
