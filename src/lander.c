@@ -250,6 +250,7 @@ void abduct(Lander *lander) {
       return;
    }
    moveLander(lander, (Point) { 0, RISE_SPEED, 0 });
+   if (lander->target == NULL) return;
    topOfWorld(*lander)
       ? performAbduction(lander)
       : adjustHumanByVector(lander->target, (Point) { 0, RISE_SPEED, 0 });
