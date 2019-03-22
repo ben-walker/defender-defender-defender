@@ -35,6 +35,9 @@ void spawnHumansAndAliens() {
    spawnHumanCoordinates(48, 0, 59);
    spawnHumanCoordinates(52, 0, 27);
 
+   // below ground human
+   spawnHumanCoordinates(54, 0, 50);
+
    for (int i = 0; i < MAX_LANDERS; i += 1)
       spawnLander();
 }
