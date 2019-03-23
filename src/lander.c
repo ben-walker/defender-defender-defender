@@ -15,7 +15,7 @@ static const int SEARCH_HEIGHT = 35,
    BODY_COLOR = 6,
    SU_BODY_COLOR = 1,
    ATTACK_RANGE = 40,
-   BOUNCE_TIME = 1500, // ms
+   BOUNCE_TIME = 1000, // ms
    ATTACK_FREQ = 1500, // ms
    RECAL_FREQ = 400; // ms
 static const float RANGE = 10.0,
@@ -212,6 +212,12 @@ void detectLanderCollisions(Lander *lander) {
 
 void moveLander(Lander *lander, Point movementVector) {
    eraseLander(*lander);
+   if (topOfWorld(*lander)) {
+      movementVector.x = randF();
+      movementVector.y = 0;
+      movementVector.z = randF();
+      lander->center.y = lander->center.y - 1;
+   }
    lander->center = addPoints(lander->center, movementVector);
    corralLander(lander);
    detectLanderCollisions(lander);
